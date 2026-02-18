@@ -1,9 +1,59 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduSearch - Поиск учебных материалов</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO: Основные мета-теги -->
+    <title>EduSearch - База учебных материалов, методичек и лекций ВГТУ 2025</title>
+    <meta name="description" content="Поиск учебных материалов, лекций, методических пособий и курсовых работ для студентов. Актуальная база знаний по программированию, математике, физике и экономике. Скачать бесплатно.">
+    <meta name="keywords" content="учебные материалы, методички ВГТУ, лекции скачать, курсовые работы, база знаний, студенческий портал, EduSearch, подготовка к сессии">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="EduSearch Team">
+    <link rel="canonical" href="https://edusearch-example.ru/">
+
+    <!-- SEO: Open Graph (для соцсетей) -->
+    <meta property="og:title" content="EduSearch - Найди знания за секунду">
+    <meta property="og:description" content="Единый портал учебных материалов. Методички, лекции и пособия в один клик.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://edusearch-example.ru/">
+    <meta property="og:image" content="https://edusearch-example.ru/og-image.jpg">
+    <meta property="og:site_name" content="EduSearch">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- SEO: Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EduSearch - Учебный портал">
+    <meta name="twitter:description" content="Поиск методичек и лекций для студентов.">
+
+    <!-- Favicon (заглушка) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+
+    <!-- SEO: Структурированные данные (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "EduSearch",
+      "url": "https://edusearch-example.ru/",
+      "description": "Поиск учебных материалов и методических пособий.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://edusearch-example.ru/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ВГТУ",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://edusearch-example.ru/logo.png"
+        }
+      }
+    }
+    </script>
+
     <style>
         /* --- 1. ОСНОВНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ --- */
         :root {
@@ -29,6 +79,19 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; padding: 0; margin: 0; }
         button { font-family: inherit; }
+
+        /* Утилита для скрытия элементов (доступность + SEO) */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
 
         /* --- 2. ШАПКА И ЧАСЫ --- */
         header {
@@ -108,6 +171,7 @@
             margin: 0 auto;
             display: flex;
             gap: 10px;
+            position: relative;
         }
 
         .search-input {
@@ -159,6 +223,7 @@
             color: var(--primary-color);
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
+            font-size: 1.2rem;
         }
 
         .categories li {
@@ -207,6 +272,7 @@
             gap: 20px;
         }
 
+        /* Семантическая карточка */
         .resource-card {
             background: var(--card-bg);
             border-radius: 10px;
@@ -215,6 +281,7 @@
             transition: transform 0.2s;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .resource-card:hover { transform: translateY(-5px); }
@@ -257,7 +324,6 @@
             flex-grow: 1;
         }
 
-        /* Кнопка в карточке теперь div, чтобы не было href="#" */
         .card-btn {
             display: block;
             padding: 10px 0;
@@ -346,7 +412,6 @@
 
         .close-modal:hover { color: black; }
 
-        /* Стили внутри модалки ресурсов */
         .res-modal-header {
             display: flex;
             align-items: center;
@@ -390,54 +455,55 @@
 <body>
 
     <!-- ШАПКА -->
-    <header>
+    <header role="banner">
         <div class="header-container">
-            <div class="logo">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <a href="/" class="logo" aria-label="EduSearch - на главную">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
                 </svg>
                 <span>EduSearch</span>
-            </div>
-            <div class="clock" id="clock">00:00:00</div>
+            </a>
+            <div class="clock" id="clock" aria-label="Текущее время">00:00:00</div>
         </div>
     </header>
 
     <!-- БЕГУЩАЯ СТРОКА -->
-    <div class="ticker-wrap">
+    <div class="ticker-wrap" role="complementary" aria-label="Важные объявления">
         <div class="ticker">
             !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
         </div>
     </div>
 
     <!-- ПОИСК -->
-    <section class="hero">
-        <h1>Найди знания за секунду</h1>
-        <p>База учебных материалов, лекций и методических пособий</p>
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="Например: Математический анализ...">
-            <button class="search-btn" onclick="performSearch()">Найти</button>
+    <section class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">Найди знания за секунду</h1>
+        <p>База учебных материалов, лекций и методических пособий ВГТУ</p>
+        <div class="search-box" role="search">
+            <label for="searchInput" class="sr-only">Поиск по материалам</label>
+            <input type="text" class="search-input" id="searchInput" placeholder="Например: Математический анализ..." name="q">
+            <button class="search-btn" onclick="performSearch()" aria-label="Найти материалы">Найти</button>
         </div>
     </section>
 
     <!-- КОНТЕНТ -->
     <div class="container">
         <aside>
-            <div class="widget">
-                <h3>Категории</h3>
+            <nav class="widget" aria-labelledby="cat-title">
+                <h3 id="cat-title">Категории</h3>
                 <ul class="categories" id="categoryList">
-                    <li onclick="filterByCategory('Все')">Все материалы</li>
-                    <li onclick="filterByCategory('Программирование')">Программирование</li>
-                    <li onclick="filterByCategory('Математика')">Математика</li>
-                    <li onclick="filterByCategory('Физика')">Физика</li>
-                    <li onclick="filterByCategory('История')">История</li>
-                    <li onclick="filterByCategory('Экономика')">Экономика</li>
+                    <li onclick="filterByCategory('Все')" tabindex="0" role="button">Все материалы</li>
+                    <li onclick="filterByCategory('Программирование')" tabindex="0" role="button">Программирование</li>
+                    <li onclick="filterByCategory('Математика')" tabindex="0" role="button">Математика</li>
+                    <li onclick="filterByCategory('Физика')" tabindex="0" role="button">Физика</li>
+                    <li onclick="filterByCategory('История')" tabindex="0" role="button">История</li>
+                    <li onclick="filterByCategory('Экономика')" tabindex="0" role="button">Экономика</li>
                 </ul>
+            </nav>
+            <div class="widget banner" role="complementary">
+                <strong>Курсовая на 5?</strong>
+                <p>Методичка по оформлению уже на сайте!</p>
+                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn" rel="nofollow">Открыть PDF</a>
             </div>
-<div class="widget banner">
-    <strong>Курсовая на 5?</strong>
-    <p>Методичка по оформлению уже на сайте!</p>
-    <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
-</div>
         </aside>
 
         <main>
@@ -445,37 +511,38 @@
                 <h2 id="resultsTitle">Рекомендуемые материалы</h2>
                 <span style="color: var(--text-secondary); font-size: 14px;">Найдено: <span id="count">0</span></span>
             </div>
-            <div class="resources-grid" id="resourcesGrid">
+            <!-- Сетка ресурсов с микроразметкой ItemList генерируется JS -->
+            <div class="resources-grid" id="resourcesGrid" itemscope itemtype="https://schema.org/ItemList">
                 <!-- Карточки -->
             </div>
         </main>
     </div>
 
     <!-- НОВОСТИ -->
-    <section class="news-section">
-        <h2 style="color: var(--text-main); border-bottom: 2px solid #e3f2fd; padding-bottom: 10px;">Новости образования</h2>
+    <section class="news-section" aria-labelledby="news-title">
+        <h2 id="news-title" style="color: var(--text-main); border-bottom: 2px solid #e3f2fd; padding-bottom: 10px;">Новости образования</h2>
         <div class="news-grid" id="newsGrid">
             <!-- Новости -->
         </div>
     </section>
 
     <!-- МОДАЛЬНОЕ ОКНО 1: НОВОСТИ -->
-    <div id="newsModal" class="modal">
+    <div id="newsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="newsModalTitle">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('newsModal')">&times;</span>
+            <span class="close-modal" onclick="closeModal('newsModal')" aria-label="Закрыть">&times;</span>
             <h2 id="newsModalTitle" style="color: var(--primary-color);"></h2>
             <p id="newsModalDate" style="color: #999; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 10px;"></p>
             <div id="newsModalBody" style="margin-top: 20px; line-height: 1.8;"></div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО 2: УЧЕБНЫЕ МАТЕРИАЛЫ (ПОДРОБНЕЕ) -->
-    <div id="resourceModal" class="modal">
+    <!-- МОДАЛЬНОЕ ОКНО 2: УЧЕБНЫЕ МАТЕРИАЛЫ -->
+    <div id="resourceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resTitle">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('resourceModal')">&times;</span>
+            <span class="close-modal" onclick="closeModal('resourceModal')" aria-label="Закрыть">&times;</span>
 
             <div class="res-modal-header">
-                <div id="resIcon" class="res-modal-icon"></div>
+                <div id="resIcon" class="res-modal-icon" aria-hidden="true"></div>
                 <div>
                     <h2 id="resTitle" style="margin: 0; color: var(--text-main);"></h2>
                     <span id="resCategory" style="background: var(--header-bg); padding: 2px 8px; border-radius: 4px; font-size: 12px; color: var(--primary-color);"></span>
@@ -495,7 +562,7 @@
         </div>
     </div>
 
-    <footer>
+    <footer role="contentinfo">
         <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
         <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
     </footer>
@@ -503,7 +570,7 @@
     <!-- СКРИПТЫ -->
     <script>
         // --- 1. БАЗА ДАННЫХ ---
-const resources = [
+        const resources = [
             {
                 id: 1,
                 title: "Основы Python для начинающих",
@@ -570,7 +637,7 @@ const resources = [
                 icon: "📈",
                 file: "macroeconomics.html"
             },
-{
+            {
                 id: 7,
                 title: "Дискретная математика",
                 category: "Математика",
@@ -627,7 +694,7 @@ const resources = [
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Рендеринг карточек
+        // Рендеринг карточек с микроразметкой Schema.org (LearningResource)
         function renderResources(data) {
             const grid = document.getElementById('resourcesGrid');
             const countSpan = document.getElementById('count');
@@ -641,16 +708,26 @@ const resources = [
             }
 
             data.forEach(item => {
-                const card = document.createElement('div');
+                // Используем тег article для семантики
+                const card = document.createElement('article');
                 card.className = 'resource-card';
-                // Обратите внимание: кнопка вызывает функцию openResourceModal
+                // Добавляем микроразметку
+                card.setAttribute('itemscope', '');
+                card.setAttribute('itemtype', 'https://schema.org/LearningResource');
+                card.setAttribute('itemprop', 'itemListElement');
+
                 card.innerHTML = `
-                    <div class="card-img">${item.icon}</div>
+                    <div class="card-img" aria-hidden="true">${item.icon}</div>
                     <div class="card-body">
-                        <div class="card-tag">${item.category}</div>
-                        <h3 class="card-title">${item.title}</h3>
-                        <p class="card-desc">${item.desc}</p>
-                        ${item.file ? `<a href="${item.file}" class="card-btn">Подробнее</a>` : `<button class="card-btn" onclick="openResourceModal(${item.id})">Подробнее</button>`}
+                        <div class="card-tag" itemprop="educationalLevel">${item.category}</div>
+                        <h3 class="card-title" itemprop="name">${item.title}</h3>
+                        <meta itemprop="author" content="${item.author}">
+                        <meta itemprop="datePublished" content="${item.year}">
+                        <p class="card-desc" itemprop="description">${item.desc}</p>
+                        ${item.file ? 
+                            `<a href="${item.file}" class="card-btn" itemprop="url">Подробнее</a>` : 
+                            `<button class="card-btn" onclick="openResourceModal(${item.id})" aria-label="Подробнее о ${item.title}">Подробнее</button>`
+                        }
                     </div>
                 `;
                 grid.appendChild(card);
@@ -661,13 +738,21 @@ const resources = [
         function renderNews() {
             const newsContainer = document.getElementById('newsGrid');
             newsData.forEach(item => {
-                const div = document.createElement('div');
+                const div = document.createElement('article'); // article вместо div
                 div.className = 'news-item';
+                div.setAttribute('itemscope', '');
+                div.setAttribute('itemtype', 'https://schema.org/NewsArticle');
+                
+                // Доступность: делаем элемент фокусируемым
+                div.tabIndex = 0;
                 div.onclick = function() { openNewsModal(item.id); };
+                // Обработка нажатия Enter
+                div.onkeydown = function(e) { if(e.key === 'Enter') openNewsModal(item.id); };
+
                 div.innerHTML = `
-                    <div class="news-date">${item.date}</div>
-                    <h4>${item.title}</h4>
-                    <p>${item.short}</p>
+                    <div class="news-date" itemprop="datePublished">${item.date}</div>
+                    <h4 itemprop="headline">${item.title}</h4>
+                    <p itemprop="description">${item.short}</p>
                 `;
                 newsContainer.appendChild(div);
             });
@@ -675,7 +760,6 @@ const resources = [
 
         // --- ЛОГИКА МОДАЛЬНЫХ ОКОН ---
 
-        // Открытие новости
         function openNewsModal(id) {
             const item = newsData.find(n => n.id === id);
             if (item) {
@@ -686,12 +770,23 @@ const resources = [
             }
         }
 
-        // Закрытие любого модального окна по ID
+        function openResourceModal(id) {
+            const item = resources.find(r => r.id === id);
+            if (item) {
+                document.getElementById('resTitle').textContent = item.title;
+                document.getElementById('resCategory').textContent = item.category;
+                document.getElementById('resAuthor').textContent = item.author;
+                document.getElementById('resYear').textContent = item.year;
+                document.getElementById('resFullDesc').textContent = item.fullDesc;
+                document.getElementById('resIcon').textContent = item.icon;
+                document.getElementById('resourceModal').style.display = "block";
+            }
+        }
+
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
         }
 
-        // Закрытие при клике вне окна
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = "none";

@@ -1,9 +1,41 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Математический анализ: Том 1</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Математический анализ: Том 1 - Ильин В.А., Позняк Э.Г. | EduSearch</title>
+    <meta name="description" content="Учебник по математическому анализу (Том 1). Авторы: Ильин В.А., Позняк Э.Г. Читать онлайн: пределы, дифференциалы, интегралы, ряды.">
+    <meta name="keywords" content="математический анализ, учебник, Ильин Позняк, дифференциальное исчисление, интегралы, ВУЗ">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/materials/math-analysis-vol1">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="book">
+    <meta property="og:title" content="Математический анализ: Том 1">
+    <meta property="og:description" content="Фундаментальный учебник по матанализу для ВУЗов.">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/math-cover.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/materials/math-analysis-vol1">
+
+    <!-- JSON-LD Schema (Структурированные данные) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "Математический анализ: Том 1",
+      "author": [
+        {"@type": "Person", "name": "Ильин В.А."},
+        {"@type": "Person", "name": "Позняк Э.Г."}
+      ],
+      "datePublished": "2023",
+      "inLanguage": "ru",
+      "genre": "Educational",
+      "publisher": "EduSearch",
+      "description": "Фундаментальный учебник по математическому анализу."
+    }
+    </script>
+
     <style>
         :root {
             --bg-color: #f4f6f8;
@@ -25,7 +57,8 @@
             line-height: 1.6;
         }
 
-        a { text-decoration: none; color: inherit; }
+        a { text-decoration: none; color: inherit; transition: color 0.2s; }
+        a:hover { color: var(--primary-color); }
         ul { list-style: none; padding: 0; margin: 0; }
         button { font-family: inherit; }
 
@@ -97,6 +130,7 @@
             display: grid;
             grid-template-columns: 250px 1fr;
             gap: 30px;
+            margin-top: 30px;
         }
 
         aside .widget {
@@ -112,16 +146,20 @@
             color: var(--primary-color);
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
+            font-size: 18px;
         }
 
-.categories li {
-            padding: 8px 0;
+        .categories li {
             border-bottom: 1px solid #f9f9f9;
-            cursor: pointer;
-            transition: color 0.2s;
         }
 
-        .categories li:hover {
+        .categories a {
+            display: block;
+            padding: 8px 0;
+            width: 100%;
+        }
+
+        .categories a:hover {
             color: var(--primary-color);
             padding-left: 5px;
         }
@@ -142,6 +180,7 @@
             margin-top: 5px;
             transition: all 0.3s;
             display: inline-block;
+            font-size: 14px;
         }
         .download-btn:hover { background: #333; color: #fff; }
 
@@ -162,6 +201,7 @@
             font-size: 32px;
             margin: 0 0 10px 0;
             color: var(--text-main);
+            line-height: 1.2;
         }
 
         .article-meta {
@@ -169,6 +209,7 @@
             gap: 20px;
             color: var(--text-secondary);
             font-size: 14px;
+            flex-wrap: wrap;
         }
 
         .article-content {
@@ -180,10 +221,19 @@
             color: var(--primary-color);
             margin: 30px 0 15px 0;
             font-size: 24px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .article-content h3 {
+            color: #455a64;
+            font-size: 20px;
+            margin-top: 25px;
         }
 
         .article-content p {
             margin: 15px 0;
+            text-align: justify;
         }
 
         .article-content ul, .article-content ol {
@@ -197,10 +247,12 @@
 
         .article-content blockquote {
             border-left: 4px solid var(--primary-color);
-            padding-left: 20px;
+            background: #f9fbfd;
+            padding: 15px 20px;
             margin: 20px 0;
             font-style: italic;
             color: var(--text-secondary);
+            border-radius: 0 5px 5px 0;
         }
 
         .article-footer {
@@ -227,40 +279,6 @@
             font-weight: bold;
         }
 
-        .download-section {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-
-        .download-section h3 {
-            margin: 0 0 15px 0;
-            color: var(--primary-color);
-        }
-
-        .download-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .download-btn {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            text-align: center;
-        }
-
-        .download-btn:hover {
-            background-color: #66bb6a;
-        }
-
         footer {
             background-color: #37474f;
             color: #cfd8dc;
@@ -271,26 +289,26 @@
 
         @media (max-width: 768px) {
             .container { grid-template-columns: 1fr; }
-            .article-footer { flex-direction: column; gap: 15px; }
-            .download-options { grid-template-columns: 1fr; }
+            .article-footer { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .header-container { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <header itemscope itemtype="http://schema.org/WPHeader">
         <div class="header-container">
-            <div class="logo">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <a href="/" class="logo" title="На главную EduSearch">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
                 </svg>
                 <span>EduSearch</span>
-            </div>
-            <div class="clock" id="clock">00:00:00</div>
+            </a>
+            <div class="clock" id="clock" aria-label="Текущее время">00:00:00</div>
         </div>
     </header>
 
-    <div class="ticker-wrap">
+    <div class="ticker-wrap" role="alert">
         <div class="ticker">
             !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
         </div>
@@ -298,116 +316,130 @@
 
     <div class="container">
         <aside>
-            <div class="widget">
+            <nav class="widget" aria-label="Категории материалов">
                 <h3>Категории</h3>
-                <ul class="categories" id="categoryList">
-                    <li onclick="filterByCategory('Все')">Все материалы</li>
-                    <li onclick="filterByCategory('Программирование')">Программирование</li>
-                    <li onclick="filterByCategory('Математика')">Математика</li>
-                    <li onclick="filterByCategory('Физика')">Физика</li>
-                    <li onclick="filterByCategory('История')">История</li>
-                    <li onclick="filterByCategory('Экономика')">Экономика</li>
+                <!-- SEO: Использование ссылок вместо onclick для лучшей индексации -->
+                <ul class="categories">
+                    <li><a href="/" title="Все учебные материалы">Все материалы</a></li>
+                    <li><a href="/category/programming" title="Учебники по программированию">Программирование</a></li>
+                    <li><a href="/category/math" title="Учебники по математике">Математика</a></li>
+                    <li><a href="/category/physics" title="Учебники по физике">Физика</a></li>
+                    <li><a href="/category/history" title="Материалы по истории">История</a></li>
+                    <li><a href="/category/economics" title="Материалы по экономике">Экономика</a></li>
                 </ul>
-            </div>
+            </nav>
+            
             <div class="widget banner">
                 <strong>Курсовая на 5?</strong>
                 <p>Методичка по оформлению уже на сайте!</p>
-                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
+                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn" title="Скачать методические указания PDF">Открыть PDF</a>
             </div>
         </aside>
 
         <main>
-            <div class="article-header">
-                <h1 class="article-title">Математический анализ: Том 1</h1>
-                <div class="article-meta">
-                    <span>Автор: Ильин В.А., Позняк Э.Г.</span>
-                    <span>Категория: Математика</span>
-                    <span>Дата: 2023</span>
+            <!-- Используем Schema.org Book для разметки контента -->
+            <article itemscope itemtype="http://schema.org/Book">
+                <div class="article-header">
+                    <!-- Заголовок является частью статьи (H1), как в примере -->
+                    <h1 class="article-title" itemprop="name">Математический анализ: Том 1</h1>
+                    <div class="article-meta">
+                        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                            Автор: <span itemprop="name">Ильин В.А.</span>, <span itemprop="name">Позняк Э.Г.</span>
+                        </span>
+                        <span>Категория: <a href="/category/math">Математика</a></span>
+                        <span>Год издания: <time itemprop="datePublished" datetime="2023">2023</time></span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="article-content">
-                <h2>Введение</h2>
-                <p>Математический анализ - это раздел математики, изучающий пределы, непрерывность, дифференцирование и интегрирование функций. Этот учебник предназначен для студентов вузов, изучающих математику, физику, инженерные и экономические специальности.</p>
+                <div class="article-content" itemprop="description">
+                    <section id="intro">
+                        <h2>Введение в курс матанализа</h2>
+                        <p><strong>Математический анализ</strong> — это фундаментальный раздел высшей математики, изучающий пределы, непрерывность, дифференцирование и интегрирование функций. Данный учебник (Том 1) предназначен для студентов технических вузов, изучающих прикладную математику, физику, инженерные и экономические специальности.</p>
+                    </section>
 
-                <h2>Глава 1. Основные понятия</h2>
-                <p>В этой главе мы рассмотрим основные понятия математического анализа, необходимые для дальнейшего изучения.</p>
+                    <section id="chapter-1">
+                        <h2>Глава 1. Основные понятия анализа</h2>
+                        <p>В этой главе рассматриваются базовые определения, необходимые для дальнейшего изучения дисциплины.</p>
 
-                <h3>1.1. Множества и функции</h3>
-                <p>Множество - это совокупность элементов, обладающих определенным свойством. Функция - это правило, по которому каждому элементу из одного множества (области определения) ставится в соответствие единственный элемент из другого множества (области значений).</p>
+                        <h3>1.1. Теория множеств и функции</h3>
+                        <p>Множество — это совокупность элементов, объединенных общим свойством. Функция — это закон соответствия между элементами двух множеств (области определения и области значений).</p>
 
-                <h3>1.2. Последовательности</h3>
-                <p>Последовательность - это функция, областью определения которой является множество натуральных чисел. Последовательность {aₙ} сходится к пределу L, если для любого ε > 0 существует номер N такой, что для всех n > N выполняется неравенство |aₙ - L| < ε.</p>
+                        <h3>1.2. Числовые последовательности</h3>
+                        <p>Последовательность {aₙ} сходится к пределу L, если для любого ε > 0 существует номер N, зависящий от ε, такой, что для всех n > N выполняется неравенство |aₙ - L| < ε.</p>
+                    </section>
 
-                <h2>Глава 2. Дифференциальное исчисление</h2>
-                <p>Дифференциальное исчисление изучает скорость изменения функций и их локальное поведение.</p>
+                    <section id="chapter-2">
+                        <h2>Глава 2. Дифференциальное исчисление</h2>
+                        <p>Раздел посвящен изучению скорости изменения функций и их локальному поведению.</p>
 
-                <h3>2.1. Предел функции</h3>
-                <p>Предел функции f(x) при x стремящемся к a равен L, если для любого ε > 0 существует δ > 0 такое, что для всех x, удовлетворяющих неравенству 0 < |x - a| < δ, выполняется неравенство |f(x) - L| < ε.</p>
+                        <h3>2.1. Предел функции</h3>
+                        <p>Ключевое понятие анализа. Предел функции f(x) при x → a равен L, если значения функции неограниченно приближаются к L при приближении аргумента к a.</p>
 
-                <h3>2.2. Непрерывность</h3>
-                <p>Функция f(x) непрерывна в точке a, если выполняются три условия:
-                    <ol>
-                        <li>f(a) определена</li>
-                        <li>lim(x→a) f(x) существует</li>
-                        <li>lim(x→a) f(x) = f(a)</li>
-                    </ol>
-                </p>
+                        <h3>2.2. Непрерывность функции</h3>
+                        <p>Функция f(x) непрерывна в точке a, если предел функции в этой точке совпадает с ее значением: lim(x→a) f(x) = f(a).</p>
 
-                <h3>2.3. Производная</h3>
-                <p>Производная функции f(x) в точке a определяется как предел:
-                    f'(a) = lim(h→0) [f(a+h) - f(a)]/h
-                </p>
+                        <h3>2.3. Производная и дифференциал</h3>
+                        <p>Производная характеризует скорость изменения функции. Определение через предел отношения приращения функции к приращению аргумента: f'(a) = lim(h→0) [f(a+h) - f(a)]/h.</p>
+                    </section>
 
-                <h2>Глава 3. Интегральное исчисление</h2>
-                <p>Интегральное исчисление изучает накопление величин и площади под кривыми.</p>
+                    <section id="chapter-3">
+                        <h2>Глава 3. Интегральное исчисление</h2>
+                        <p>Изучение процессов накопления величин и вычисления площадей криволинейных трапеций.</p>
 
-                <h3>3.1. Определенный интеграл</h3>
-                <p>Определенный интеграл от функции f(x) на отрезке [a, b] определяется как предел интегральных сумм Римана при стремлении числа разбиений к бесконечности.</p>
+                        <h3>3.1. Определенный интеграл Римана</h3>
+                        <p>Определяется как предел интегральных сумм при стремлении диаметра разбиения к нулю.</p>
 
-                <h3>3.2. Неопределенный интеграл</h3>
-                <p>Неопределенный интеграл от функции f(x) - это множество всех первообразных функций этой функции, обозначается как ∫f(x)dx.</p>
+                        <h3>3.2. Неопределенный интеграл</h3>
+                        <p>Совокупность всех первообразных функции f(x), обозначаемая символом ∫f(x)dx.</p>
+                    </section>
 
-                <h2>Глава 4. Приложения дифференциального и интегрального исчисления</h2>
-                <p>В этой главе мы рассмотрим основные приложения методов математического анализа.</p>
+                    <section id="chapter-4">
+                        <h2>Глава 4. Приложения анализа</h2>
+                        <p>Практическое применение методов дифференцирования и интегрирования.</p>
 
-                <h3>4.1. Экстремумы функций</h3>
-                <p>Для нахождения экстремумов функции f(x) необходимо найти точки, где f'(x) = 0 или f'(x) не существует, а затем проверить эти точки с помощью достаточных условий.</p>
+                        <h3>4.1. Исследование функций и экстремумы</h3>
+                        <p>Алгоритмы нахождения максимумов и минимумов функции с использованием первой и второй производной.</p>
 
-                <h3>4.2. Площадь и объем</h3>
-                <p>Площадь под кривой y = f(x) на отрезке [a, b] вычисляется как ∫[a,b] f(x)dx. Объем тела вращения вычисляется по формулам Паппуса-Гюльдена.</p>
+                        <h3>4.2. Геометрические приложения</h3>
+                        <p>Вычисление площадей плоских фигур, длин дуг кривых и объемов тел вращения.</p>
+                    </section>
 
-                <h2>Глава 5. Ряды</h2>
-                <p>Ряды - это суммы бесконечных последовательностей. Они играют важную роль в математическом анализе и его приложениях.</p>
+                    <section id="chapter-5">
+                        <h2>Глава 5. Числовые и функциональные ряды</h2>
+                        
+                        <h3>5.1. Сходимость числовых рядов</h3>
+                        <p>Ряд Σaₙ называется сходящимся, если существует конечный предел последовательности его частичных сумм.</p>
 
-                <h3>5.1. Числовые ряды</h3>
-                <p>Числовой ряд - это выражение вида Σaₙ = a₁ + a₂ + a₃ + ... . Ряд сходится, если предел последовательности его частичных сумм существует и конечен.</p>
+                        <h3>5.2. Степенные ряды и ряд Тейлора</h3>
+                        <p>Представление функций в виде бесконечных сумм степенных функций, что позволяет проводить приближенные вычисления с высокой точностью.</p>
+                    </section>
 
-                <h3>5.2. Степенные ряды</h3>
-                <p>Степенной ряд имеет вид Σaₙ(x - x₀)ⁿ. Он сходится в некоторой окрестности точки x₀ и может быть использован для приближенного вычисления функций.</p>
+                    <section id="conclusion">
+                        <h2>Заключение</h2>
+                        <p>Учебник Ильина и Позняка является классическим пособием. Освоение методов математического анализа открывает возможности для решения сложных задач в физике, IT, инженерии и экономике.</p>
+                    </section>
 
-                <h2>Заключение</h2>
-                <p>Математический анализ является фундаментальным разделом математики, лежащим в основе многих прикладных наук. Освоение его методов открывает широкие возможности для решения практических задач в физике, инженерии, экономике и других областях.</p>
-
-                <blockquote>
-                    "Математика - это не только инструмент для решения задач, но и язык, на котором записана природа." - Ричард Фейнман
-                </blockquote>
-            </div>
-
-            <div class="article-footer">
-                <div class="article-tags">
-                    <span class="tag">Математика</span>
-                    <span class="tag">Анализ</span>
-                    <span class="tag">Учебник</span>
-                    <span class="tag">ВУЗ</span>
+                    <blockquote>
+                        "Математика - это не только инструмент для решения задач, но и язык, на котором записана природа." - Ричард Фейнман
+                    </blockquote>
                 </div>
-                <span>Просмотров: 1,234</span>
-            </div>
+
+                <div class="article-footer">
+                    <div class="article-tags" aria-label="Теги">
+                        <a href="/tag/math" class="tag">Математика</a>
+                        <a href="/tag/analysis" class="tag">Анализ</a>
+                        <a href="/tag/textbook" class="tag">Учебник</a>
+                        <a href="/tag/university" class="tag">ВУЗ</a>
+                    </div>
+                    <meta itemprop="interactionCount" content="UserPageVisits:1234">
+                    <span>Просмотров: 1,234</span>
+                </div>
+            </article>
         </main>
     </div>
 
-    <footer>
-        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+    <footer itemscope itemtype="http://schema.org/WPFooter">
+        <p>&copy; 2025 <span itemprop="copyrightHolder">EduSearch</span>. Учебный портал ВГТУ.</p>
         <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
     </footer>
 

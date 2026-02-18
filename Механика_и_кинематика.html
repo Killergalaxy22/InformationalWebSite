@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Механика и кинематика - EduSearch</title>
+    <meta name="description" content="Полное руководство по механике и кинематике. Законы Ньютона, движение тел, кинематические уравнения. Подготовка к экзаменам и лабораторным работам.">
+    <meta name="keywords" content="механика, кинематика, физика, законы Ньютона, движение, ускорение, скорость, физика для студентов">
+    <meta name="author" content="Кафедра общей физики">
+    <meta property="og:title" content="Механика и кинематика - Полное руководство">
+    <meta property="og:description" content="Подробное изучение механики и кинематики с примерами и задачами">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://edusearch.vstu.ru/Механика_и_кинематика.html">
+    <meta property="og:image" content="https://edusearch.vstu.ru/images/mechanics-preview.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Механика и кинематика">
+    <meta name="twitter:description" content="Полное руководство по механике и кинематике">
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --header-bg: #e3f2fd;
+            --primary-color: #5c86ad;
+            --accent-color: #81c784;
+            --text-main: #37474f;
+            --text-secondary: #78909c;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { font-family: inherit; }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--primary-color);
+            border: 1px solid #dcebf7;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        aside .widget {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .categories li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .categories li:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .banner {
+            background-color: #fff3e0;
+            border: 1px dashed #ffb74d;
+            text-align: center;
+            padding: 15px;
+        }
+        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        .download-btn {
+            background: none;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .download-btn:hover { background: #333; color: #fff; }
+
+        main {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-header {
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px 0;
+            font-size: 24px;
+        }
+
+        .article-content p {
+            margin: 15px 0;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .article-content li {
+            margin: 8px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--header-bg);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .download-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .download-section h3 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .download-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background-color: #66bb6a;
+        }
+
+        footer {
+            background-color: #37474f;
+            color: #cfd8dc;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .article-footer { flex-direction: column; gap: 15px; }
+            .download-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+                <span>EduSearch</span>
+            </div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <div class="widget">
+                <h3>Категории</h3>
+                <ul class="categories" id="categoryList">
+                    <li onclick="filterByCategory('Все')">Все материалы</li>
+                    <li onclick="filterByCategory('Программирование')">Программирование</li>
+                    <li onclick="filterByCategory('Математика')">Математика</li>
+                    <li onclick="filterByCategory('Физика')">Физика</li>
+                    <li onclick="filterByCategory('История')">История</li>
+                    <li onclick="filterByCategory('Экономика')">Экономика</li>
+                </ul>
+            </div>
+            <div class="widget banner">
+                <strong>Курсовая на 5?</strong>
+                <p>Методичка по оформлению уже на сайте!</p>
+                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
+            </div>
+        </aside>
+
+        <main>
+            <div class="article-header">
+                <h1 class="article-title">Механика и кинематика</h1>
+                <div class="article-meta">
+                    <span>Автор: Кафедра общей физики</span>
+                    <span>Категория: Физика</span>
+                    <span>Дата: 18.02.2026</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <h2>Введение</h2>
+                <p>Механика - это раздел физики, изучающий движение и взаимодействие тел. Кинематика - это раздел механики, описывающий движение тел без учета причин, его вызывающих. В этой статье мы рассмотрим основные понятия, законы и уравнения, необходимые для понимания механики и кинематики.</p>
+
+                <h2>Основные понятия кинематики</h2>
+                <p>Кинематика изучает движение тел в пространстве и времени. Основные понятия:</p>
+                <ul>
+                    <li><strong>Материальная точка</strong> - тело, размерами которого можно пренебречь по сравнению с расстояниями, на которых рассматривается его движение.</li>
+                    <li><strong>Система отсчета</strong> - совокупность тела отсчета, системы координат и часов для измерения времени.</li>
+                    <li><strong>Траектория</strong> - линия, вдоль которой движется материальная точка.</li>
+                    <li><strong>Путь</strong> - длина траектории, пройденная телом.</li>
+                    <li><strong>Перемещение</strong> - вектор, соединяющий начальное и конечное положения тела.</li>
+                </ul>
+
+                <h2>Кинематические величины</h2>
+                <h3>Скорость</h3>
+                <p>Скорость - векторная величина, характеризующая быстроту перемещения:</p>
+                <p><strong>v = dr/dt</strong></p>
+                <p>где dr - элементарное перемещение, dt - элементарный промежуток времени.</p>
+                <p>Скорость можно разделить на:</p>
+                <ul>
+                    <li><strong>Среднюю скорость</strong>: <strong>vₘ = Δr/Δt</strong></li>
+                    <li><strong>Мгновенную скорость</strong>: <strong>v = lim(Δt→0) Δr/Δt</strong></li>
+                </ul>
+
+                <h3>Ускорение</h3>
+                <p>Ускорение - векторная величина, характеризующая быстроту изменения скорости:</p>
+                <p><strong>a = dv/dt</strong></p>
+                <p>Ускорение также имеет среднее и мгновенное значения:</p>
+                <ul>
+                    <li><strong>Среднее ускорение</strong>: <strong>aₘ = Δv/Δt</strong></li>
+                    <li><strong>Мгновенное ускорение</strong>: <strong>a = lim(Δt→0) Δv/Δt</strong></li>
+                </ul>
+
+                <h2>Типы движения</h2>
+                <h3>Поступательное движение</h3>
+                <p>При поступательном движении все точки тела движутся одинаково. Различают:</p>
+                <ul>
+                    <li><strong>Равномерное прямолинейное движение</strong>: скорость постоянна, <strong>a = 0</strong></li>
+                    <li><strong>Равнопеременное прямолинейное движение</strong>: ускорение постоянно</li>
+                </ul>
+
+                <h3>Криволинейное движение</h3>
+                <p>При криволинейном движении тело движется по кривой траектории. Основные типы:</p>
+                <ul>
+                    <li><strong>Равномерное движение по окружности</strong></li>
+                    <li><strong>Нелинейное движение с переменной скоростью</strong></li>
+                </ul>
+
+                <h2>Кинематические уравнения</h2>
+                <h3>Равномерное прямолинейное движение</h3>
+                <p><strong>s = s₀ + vt</strong></p>
+                <p>где s - путь, s₀ - начальное положение, v - скорость, t - время.</p>
+
+                <h3>Равнопеременное прямолинейное движение</h3>
+                <p><strong>s = s₀ + v₀t + ½at²</strong></p>
+                <p><strong>v = v₀ + at</strong></p>
+                <p><strong>v² = v₀² + 2a(s - s₀)</strong></p>
+
+                <h2>Движение под действием силы тяжести</h2>
+                <p>Свободное падение тела происходит с ускорением свободного падения <strong>g ≈ 9.81 м/с²</strong>.</p>
+                <p>Кинематические уравнения для вертикального движения:</p>
+                <p><strong>h = h₀ + v₀t - ½gt²</strong></p>
+                <p><strong>v = v₀ - gt</strong></p>
+                <p><strong>v² = v₀² - 2g(h - h₀)</strong></p>
+
+                <h2>Проекции движения на оси координат</h2>
+                <p>Для движения в трехмерном пространстве удобно использовать проекции на оси координат:</p>
+                <ul>
+                    <li><strong>Движение вдоль оси x</strong>: <strong>x = x₀ + vₓ₀t + ½aₓt²</strong></li>
+                    <li><strong>Движение вдоль оси y</strong>: <strong>y = y₀ + vу₀t + ½aуt²</strong></li>
+                    <li><strong>Движение вдоль оси z</strong>: <strong>z = z₀ + vz₀t + ½azt²</strong></li>
+                </ul>
+
+                <h2>Примеры задач</h2>
+                <h3>Пример 1: Равномерное движение</h3>
+                <p>Тело движется равномерно со скоростью 20 м/с. Определите путь, пройденный телом за 5 с.</p>
+                <p><strong>Решение:</strong> s = vt = 20 × 5 = 100 м</p>
+
+                <h3>Пример 2: Равнопеременное движение</h3>
+                <p>Тело начинает движение из состояния покоя с ускорением 3 м/с². Найдите скорость через 4 с и путь, пройденный за это время.</p>
+                <p><strong>Решение:</strong> v = at = 3 × 4 = 12 м/с; s = ½at² = ½ × 3 × 16 = 24 м</p>
+
+                <h2>Заключение</h2>
+                <p>Кинематика предоставляет фундаментальные инструменты для описания движения тел. Понимание основных понятий, типов движения и кинематических уравнений необходимо для изучения динамики и других разделов физики. Освоение этих концепций поможет в решении практических задач и подготовке к экзаменам.</p>
+            </div>
+
+            <div class="article-footer">
+                <div class="article-tags">
+                    <span class="tag">Физика</span>
+                    <span class="tag">Механика</span>
+                    <span class="tag">Кинематика</span>
+                    <span class="tag">Законы Ньютона</span>
+                </div>
+                <span>Просмотров: 234</span>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

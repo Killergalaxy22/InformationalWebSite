@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История России XX век - Эпоха перемен и революций</title>
+    <meta name="description" content="Подробный курс лекций по истории России XX века: от Русской революции до современности. Основные даты, события и исторические личности.">
+    <meta name="keywords" content="история России, XX век, революция, СССР, советский период, современная Россия, исторические события, даты, личности">
+    <meta name="author" content="Петров Н.Н.">
+    <meta property="og:title" content="История России XX век - Эпоха перемен и революций">
+    <meta property="og:description" content="Подробный курс лекций по истории России XX века: от Русской революции до современности.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://edu-search.ru/История_России_XX_век.html">
+    <meta property="og:image" content="https://edu-search.ru/images/istoriya-rossii-xxv.jpg">
+    <meta property="og:locale" content="ru_RU">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="История России XX век - Эпоха перемен и революций">
+    <meta name="twitter:description" content="Подробный курс лекций по истории России XX века: от Русской революции до современности.">
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --header-bg: #e3f2fd;
+            --primary-color: #5c86ad;
+            --accent-color: #81c784;
+            --text-main: #37474f;
+            --text-secondary: #78909c;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { font-family: inherit; }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--primary-color);
+            border: 1px solid #dcebf7;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        aside .widget {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .categories li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .categories li:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .banner {
+            background-color: #fff3e0;
+            border: 1px dashed #ffb74d;
+            text-align: center;
+            padding: 15px;
+        }
+        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        .download-btn {
+            background: none;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .download-btn:hover { background: #333; color: #fff; }
+
+        main {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-header {
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px 0;
+            font-size: 24px;
+        }
+
+        .article-content p {
+            margin: 15px 0;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .article-content li {
+            margin: 8px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--header-bg);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .download-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .download-section h3 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .download-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background-color: #66bb6a;
+        }
+
+        footer {
+            background-color: #37474f;
+            color: #cfd8dc;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .article-footer { flex-direction: column; gap: 15px; }
+            .download-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+                <span>EduSearch</span>
+            </div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <div class="widget">
+                <h3>Категории</h3>
+                <ul class="categories" id="categoryList">
+                    <li onclick="filterByCategory('Все')">Все материалы</li>
+                    <li onclick="filterByCategory('Программирование')">Программирование</li>
+                    <li onclick="filterByCategory('Математика')">Математика</li>
+                    <li onclick="filterByCategory('Физика')">Физика</li>
+                    <li onclick="filterByCategory('История')">История</li>
+                    <li onclick="filterByCategory('Экономика')">Экономика</li>
+                </ul>
+            </div>
+            <div class="widget banner">
+                <strong>Курсовая на 5?</strong>
+                <p>Методичка по оформлению уже на сайте!</p>
+                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
+            </div>
+        </aside>
+
+        <main>
+            <div class="article-header">
+                <h1 class="article-title">История России XX век - Эпоха перемен и революций</h1>
+                <div class="article-meta">
+                    <span>Автор: Петров Н.Н.</span>
+                    <span>Категория: История</span>
+                    <span>Дата: 18.02.2026</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <h2>Введение</h2>
+                <p>XX век стал одним из самых драматичных и переломных периодов в истории России. За сто лет страна пережила две мировые войны, три революции, гражданскую войну, индустриализацию, Великую Отечественную войну, холодную войну и переход к новой экономической модели. Этот курс лекций охватывает основные события, даты и исторические личности, которые определили судьбу России в XX веке.</p>
+
+                <h2>Революционная эпоха (1900-1917)</h2>
+                <p>Начало века ознаменовалось экономическим ростом и модернизацией, но также и социальными противоречиями. Крестьянские волнения, рабочие забастовки и национальные движения создавали напряженность в обществе.</p>
+
+                <h3>Русско-японская война (1904-1905)</h3>
+                <p>Поражение в войне с Японией стало серьезным ударом по престижу Российской империи и стало одной из причин Первой русской революции.</p>
+
+                <h3>Первая русская революция (1905-1907)</h3>
+                <p>Восстание на броненосце "Потемкин", Кровавое воскресенье, создание Советов рабочих депутатов. В результате была принята Конституция, учреждена Государственная Дума.</p>
+
+                <h3>Первая мировая война (1914-1918)</h3>
+                <p>Россия вступила в войну на стороне Антанты. Тяжелые поражения, экономический кризис, потери на фронте привели к росту недовольства в обществе.</p>
+
+                <h3>Февральская революция (1917)</h3>
+                <p>Восстание в Петрограде, отречение Николая II от престола, создание Временного правительства и Петроградского Совета. Начало двоевластия.</p>
+
+                <h3>Октябрьская революция (1917)</h3>
+                <p>Вооруженный захват власти большевиками, роспуск Учредительного собрания, начало Гражданской войны. Ленин провозгласил Советскую власть.</p>
+
+                <h2>Советский период (1917-1991)</h2>
+                <p>Создание первого в мире социалистического государства, индустриализация, коллективизация, Великая Отечественная война, холодная война и, наконец, распад СССР.</p>
+
+                <h3>Гражданская война (1917-1922)</h3>
+                <p>Белое движение против Красной армии, интервенция стран Антанты, военный коммунизм, продразверстка. Победа большевиков привела к созданию СССР.</p>
+
+                <h3>НЭП (1921-1928)</h3>
+                <p>Новая экономическая политика - временное возвращение к рыночным отношениям. Разрешение частной торговли, мелкого предпринимательства, налоговая система вместо продразверстки.</p>
+
+                <h3>Индустриализация (1928-1941)</h3>
+                <p>Первая пятилетка, создание тяжелой промышленности, строительство ГЭС, заводов, металлургических комбинатов. Коллективизация сельского хозяйства.</p>
+
+                <h3>Великая Отечественная война (1941-1945)</h3>
+                <p>Нападение Германии на СССР, Сталинградская битва, Курская дуга, взятие Берлина. СССР стал одной из двух сверхдержав мира.</p>
+
+                <h3>Послевоенное восстановление (1945-1953)</h3>
+                <p>Девятая пятилетка, восстановление разрушенного хозяйства, создание ядерного оружия, начало холодной войны.</p>
+
+                <h3>Хрущевская оттепель (1953-1964)</h3>
+                <p>Доклад Н.С. Хрущева на XX съезде КПСС, осуждение культа личности Сталина, реабилитация жертв репрессий, космическая программа.</p>
+
+                <h3>Период застоя (1964-1985)</h3>
+                <p>Правление Л.И. Брежнева, относительная стабильность, рост благосостояния, но также и бюрократизация, коррупция, застой в экономике.</p>
+
+                <h3>Перестройка (1985-1991)</h3>
+                <p>Реформы М.С. Горбачева: гласность, демократизация, ускорение, гласность. Начало рыночных реформ, но также и экономический кризис, рост национальных движений.</p>
+
+                <h3>Распад СССР (1991)</h3>
+                <p>Августовский путч, Беловежские соглашения, создание СНГ. Формирование независимой Российской Федерации.</p>
+
+                <h2>Современная Россия (1991-2000)</h2>
+                <p>Переход к рыночной экономике, приватизация, инфляция, дефолт 1998 года, начало восстановления экономики при Б.Н. Ельцине.</p>
+
+                <h3>Экономические реформы</h3>
+                <p>Шоковая терапия, либерализация цен, приватизация по ваучерам, создание институтов рыночной экономики.</p>
+
+                <h3>Политические изменения</h3>
+                <p>Принятие Конституции 1993 года, многопартийная система, президентская республика, конфликт с парламентом.</p>
+
+                <h3>Международные отношения</h3>
+                <p>Распад Варшавского договора, создание СНГ, вступление в Совет Европы, начало партнерства с Западом.</p>
+
+                <h2>Основные даты и события</h2>
+                <ol>
+                    <li>1904-1905 - Русско-японская война</li>
+                    <li>1905-1907 - Первая русская революция</li>
+                    <li>1914-1918 - Первая мировая война</li>
+                    <li>1917 - Февральская и Октябрьская революции</li>
+                    <li>1917-1922 - Гражданская война</li>
+                    <li>1921-1928 - НЭП</li>
+                    <li>1928-1941 - Индустриализация</li>
+                    <li>1941-1945 - Великая Отечественная война</li>
+                    <li>1953-1964 - Хрущевская оттепель</li>
+                    <li>1964-1985 - Период застоя</li>
+                    <li>1985-1991 - Перестройка</li>
+                    <li>1991 - Распад СССР</li>
+                    <li>1991-2000 - Формирование современной России</li>
+                </ol>
+
+                <h2>Исторические личности</h2>
+                <ul>
+                    <li>Николай II - последний русский император</li>
+                    <li>В.И. Ленин - вождь Октябрьской революции</li>
+                    <li>И.В. Сталин - руководитель СССР в 1920-1950-е годы</li>
+                    <li>Н.С. Хрущев - инициатор оттепели</li>
+                    <li>Л.И. Брежнев - лидер периода застоя</li>
+                    <li>М.С. Горбачев - реформатор перестройки</li>
+                    <li>Б.Н. Ельцин - первый президент России</li>
+                </ul>
+
+                <blockquote>
+                    "История учит, но не учит тому, что нужно учить." - Эта фраза особенно актуальна для понимания уроков XX века, когда Россия прошла через столько кардинальных перемен.
+                </blockquote>
+
+                <h2>Заключение</h2>
+                <p>XX век оставил неизгладимый след в истории России. Страна прошла через революции, войны, индустриализацию, становление сверхдержавы и, наконец, возвращение к самостоятельному развитию. Уроки этого периода продолжают влиять на современную Россию, определяя ее путь в XXI веке.</p>
+            </div>
+
+            <div class="article-footer">
+                <div class="article-tags">
+                    <span class="tag">История</span>
+                    <span class="tag">XX век</span>
+                    <span class="tag">Россия</span>
+                    <span class="tag">Революция</span>
+                    <span class="tag">СССР</span>
+                </div>
+                <span>Просмотров: 1,234</span>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

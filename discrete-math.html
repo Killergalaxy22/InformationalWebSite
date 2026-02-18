@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Optimization -->
+    <title>Дискретная математика: основы, разделы и роль в программировании | EduSearch</title>
+    <meta name="description" content="Полный гид по дискретной математике для студентов технических вузов. Теория множеств, логика, графы и комбинаторика простыми словами с примерами применения в IT.">
+    <meta name="keywords" content="дискретная математика, теория графов, математическая логика, комбинаторика, теория множеств, булева алгебра, дискретка для программистов, ВГТУ">
+    <meta name="author" content="Кафедра Высшей Математики">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/discrete-math.html">
+    
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --header-bg: #e3f2fd;
+            --primary-color: #5c86ad;
+            --accent-color: #81c784;
+            --text-main: #37474f;
+            --text-secondary: #78909c;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { font-family: inherit; }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--primary-color);
+            border: 1px solid #dcebf7;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        aside .widget {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .categories li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .categories li:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .banner {
+            background-color: #fff3e0;
+            border: 1px dashed #ffb74d;
+            text-align: center;
+            padding: 15px;
+        }
+        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        .download-btn-aside {
+            background: none;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .download-btn-aside:hover { background: #333; color: #fff; }
+
+        main {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-header {
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 35px 0 15px 0;
+            font-size: 26px;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        .article-content h3 {
+            color: var(--text-main);
+            margin: 25px 0 10px 0;
+            font-size: 20px;
+        }
+
+        .article-content p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .article-content li {
+            margin: 8px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 20px;
+            margin: 25px 0;
+            font-style: italic;
+            background-color: #f8f9fa;
+            color: var(--text-secondary);
+        }
+
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--header-bg);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #37474f;
+            color: #cfd8dc;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; margin: 10px auto; }
+            .article-footer { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+                <span>EduSearch</span>
+            </a>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            !!! Внимание: Доступны новые методические указания по Дискретной математике за 2025 год +++ Открыта запись на олимпиаду по теории графов +++ Библиотека работает до 20:00 !!!
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <div class="widget">
+                <h3>Категории</h3>
+                <ul class="categories">
+                    <li><a href="index.html">Все материалы</a></li>
+                    <li><a href="#">Программирование</a></li>
+                    <li><strong>Математика</strong></li>
+                    <li><a href="#">Физика</a></li>
+                    <li><a href="#">История</a></li>
+                    <li><a href="#">Экономика</a></li>
+                </ul>
+            </div>
+            <div class="widget banner">
+                <strong>Экзамен скоро?</strong>
+                <p>Скачай шпаргалку по формулам логики!</p>
+                <a href="#" class="download-btn-aside">Скачать PDF</a>
+            </div>
+        </aside>
+
+        <main>
+            <article>
+                <div class="article-header">
+                    <h1 class="article-title">Дискретная математика: Фундамент современных технологий</h1>
+                    <div class="article-meta">
+                        <span>Автор: Кафедра ВМ</span>
+                        <span>Категория: Математика</span>
+                        <span>Дата: 20.05.2024</span>
+                    </div>
+                </div>
+
+                <div class="article-content">
+                    <p><strong>Дискретная математика</strong> — это область математики, изучающая структуры, которые по своей природе являются прерывными (дискретными), в отличие от непрерывных структур, изучаемых в классическом анализе. Именно дискретная математика является теоретическим фундаментом информатики и программирования.</p>
+
+                    <blockquote>
+                        "В цифровом мире нет 'почти' или 'немного'. Есть либо 0, либо 1. Дискретная математика учит нас работать с этой определенностью."
+                    </blockquote>
+
+                    <h2>Основные разделы дискретной математики</h2>
+                    
+                    <h3>1. Теория множеств</h3>
+                    <p>Это база всей современной математики. Она изучает совокупности объектов (элементов), рассматриваемых как единое целое. Понятия объединения, пересечения и мощности множеств используются в проектировании баз данных (SQL) и структурах данных.</p>
+
+                    <h3>2. Математическая логика и Булева алгебра</h3>
+                    <p>Изучает высказывания и операции над ними (И, ИЛИ, НЕ). Это основа работы процессоров, где логические вентили реализуют эти операции на физическом уровне, а также основа написания любых условий в коде (if-else).</p>
+
+                    <h3>3. Комбинаторика</h3>
+                    <p>Раздел, посвященный подсчету количества различных комбинаций, перестановок и размещений элементов. Комбинаторика критически важна для оценки сложности алгоритмов и в криптографии.</p>
+
+                    <h3>4. Теория графов</h3>
+                    <p>Графы — это совокупность точек (вершин) и соединяющих их линий (ребер). С помощью графов моделируются социальные сети, маршруты в навигаторах, структура интернета и связи в нейронных сетях.</p>
+
+                    <h2>Почему программисту важно знать "дискретку"?</h2>
+                    <ul>
+                        <li><strong>Оптимизация кода:</strong> Понимание алгоритмов на графах позволяет находить кратчайшие пути и оптимальные решения.</li>
+                        <li><strong>Работа с данными:</strong> Теория множеств помогает правильно строить сложные запросы к БД.</li>
+                        <li><strong>Безопасность:</strong> Современное шифрование (RSA, AES) целиком построено на теории чисел и дискретных структурах.</li>
+                        <li><strong>Искусственный интеллект:</strong> Логический вывод и деревья решений — прямые наследники дискретной математики.</li>
+                    </ul>
+
+                    <h2>Заключение</h2>
+                    <p>Изучение дискретной математики развивает абстрактное мышление, необходимое для решения сложных инженерных задач. Без понимания этих основ невозможно стать высококвалифицированным разработчиком программного обеспечения.</p>
+                </div>
+
+                <div class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">Математика</span>
+                        <span class="tag">Алгоритмы</span>
+                        <span class="tag">IT-база</span>
+                        <span class="tag">ВГТУ</span>
+                    </div>
+                    <span>Просмотров: 4,562</span>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

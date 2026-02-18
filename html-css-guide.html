@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Optimization -->
+    <title>Web-разработка: Основы HTML и CSS для начинающих | EduSearch</title>
+    <meta name="description" content="Подробное руководство по основам веб-разработки. Изучите структуру HTML5, стилизацию CSS3, семантику и современные методы верстки для создания адаптивных сайтов.">
+    <meta name="keywords" content="HTML, CSS, веб-разработка, верстка сайтов, HTML5, CSS3, фронтенд для начинающих, обучение программированию">
+    <meta name="author" content="EduSearch Team">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/html-css-guide.html">
+    
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Web-разработка: Основы HTML и CSS">
+    <meta property="og:description" content="Станьте востребованным разработчиком: от первого тега до стильного дизайна.">
+    <meta property="og:type" content="article">
+    
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --header-bg: #e3f2fd;
+            --primary-color: #5c86ad;
+            --accent-color: #81c784;
+            --text-main: #37474f;
+            --text-secondary: #78909c;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --code-bg: #272822;
+            --code-text: #f8f8f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        
+        /* Стили для кода */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--primary-color);
+            border: 1px solid #dcebf7;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        aside .widget {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .categories li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .categories li:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .banner {
+            background-color: #fff3e0;
+            border: 1px dashed #ffb74d;
+            text-align: center;
+            padding: 15px;
+        }
+        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        .download-btn-small {
+            background: none;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .download-btn-small:hover { background: #333; color: #fff; }
+
+        main {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-header {
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px 0;
+            font-size: 24px;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        .article-content p { margin: 15px 0; }
+
+        .article-content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+            list-style: disc;
+        }
+
+        .article-content li { margin: 8px 0; }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            background: #f9fbff;
+            color: var(--text-secondary);
+        }
+
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--header-bg);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #37474f;
+            color: #cfd8dc;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .article-footer { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+                <span>EduSearch</span>
+            </a>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <div class="widget">
+                <h3>Категории</h3>
+                <ul class="categories">
+                    <li><a href="index.html">Все материалы</a></li>
+                    <li><strong>Программирование</strong></li>
+                    <li>Математика</li>
+                    <li>Физика</li>
+                    <li>История</li>
+                    <li>Экономика</li>
+                </ul>
+            </div>
+            <div class="widget banner">
+                <strong>Курсовая на 5?</strong>
+                <p>Методичка по оформлению уже на сайте!</p>
+                <a href="#" class="download-btn-small">Открыть</a>
+            </div>
+        </aside>
+
+        <main>
+            <article>
+                <div class="article-header">
+                    <h1 class="article-title">Web-разработка: Основы HTML и CSS</h1>
+                    <div class="article-meta">
+                        <span>Автор: Кафедра ИТ</span>
+                        <span>Категория: Программирование</span>
+                        <span>Дата: 24.05.2025</span>
+                    </div>
+                </div>
+
+                <div class="article-content">
+                    <h2>Введение в веб-технологии</h2>
+                    <p>Современная веб-разработка базируется на «трех китах»: <strong>HTML</strong> (структура), <strong>CSS</strong> (оформление) и <strong>JavaScript</strong> (интерактивность). В этой статье мы разберем первые два компонента, которые являются фундаментом для любого фронтенд-разработчика.</p>
+
+                    <h2>HTML: Скелет вашей страницы</h2>
+                    <p>HTML (HyperText Markup Language) — это язык разметки, который сообщает браузеру, какие элементы должны быть на странице: заголовки, абзацы, изображения или ссылки.</p>
+                    
+                    <blockquote>
+                        Важно помнить: HTML описывает семантику (смысл) контента, а не его внешний вид.
+                    </blockquote>
+
+                    <p>Пример базовой структуры HTML-документа:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Моя первая страница&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Привет, мир!&lt;/h1&gt;
+    &lt;p&gt;Это мой первый параграф.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                    <h2>CSS: Магия стилей</h2>
+                    <p>CSS (Cascading Style Sheets) позволяет превратить черно-белый текст в современный интерфейс. С помощью CSS мы управляем цветами, шрифтами, отступами и расположением элементов.</p>
+                    
+                    <p>Основные концепции CSS:</p>
+                    <ul>
+                        <li><strong>Селекторы:</strong> указывают, к какому элементу применить стиль.</li>
+                        <li><strong>Свойства:</strong> определяют, что именно мы меняем (color, margin, font-size).</li>
+                        <li><strong>Блочная модель:</strong> понимание того, как складываются content, padding, border и margin.</li>
+                    </ul>
+
+                    <p>Пример стилизации заголовка:</p>
+<pre><code>h1 {
+    color: #5c86ad;
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 2px solid #81c784;
+}</code></pre>
+
+                    <h2>Современные подходы: Flexbox и Grid</h2>
+                    <p>Раньше верстка сайтов была сложной задачей из-за использования таблиц или обтеканий (floats). Сегодня стандартом являются <strong>Flexbox</strong> (для одномерных макетов) и <strong>CSS Grid</strong> (для двумерных сеток). Они позволяют создавать адаптивные сайты, которые одинаково хорошо выглядят на смартфонах и мониторах.</p>
+
+                    <h2>Заключение</h2>
+                    <p>Изучение HTML и CSS — это первый и самый важный шаг в мир IT. Освоив эти технологии, вы сможете создавать интерфейсы любой сложности и переходить к изучению программирования на JavaScript.</p>
+                </div>
+
+                <div class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">HTML5</span>
+                        <span class="tag">CSS3</span>
+                        <span class="tag">Frontend</span>
+                        <span class="tag">Web-design</span>
+                    </div>
+                    <span>Просмотров: 2,450</span>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

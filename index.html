@@ -181,7 +181,7 @@
             padding: 15px;
         }
         .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
-        
+
         .download-btn {
             background: none;
             border: 1px solid #333;
@@ -274,7 +274,7 @@
             border-bottom: none;
             transition: background 0.2s;
         }
-        
+
         .card-btn:hover {
             background-color: #f9f9f9;
         }
@@ -320,7 +320,7 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto; /* Чуть выше */
+            margin: 5% auto;
             padding: 30px;
             border: 1px solid #888;
             width: 60%;
@@ -433,11 +433,11 @@
                     <li onclick="filterByCategory('Экономика')">Экономика</li>
                 </ul>
             </div>
-            <div class="widget banner">
-                <strong>Курсовая на 5?</strong>
-                <p>Методичка по оформлению уже на сайте!</p>
-                <button class="download-btn" onclick="alert('Скачивание файла началось...')">Скачать</button>
-            </div>
+<div class="widget banner">
+    <strong>Курсовая на 5?</strong>
+    <p>Методичка по оформлению уже на сайте!</p>
+    <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
+</div>
         </aside>
 
         <main>
@@ -473,7 +473,7 @@
     <div id="resourceModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('resourceModal')">&times;</span>
-            
+
             <div class="res-modal-header">
                 <div id="resIcon" class="res-modal-icon"></div>
                 <div>
@@ -483,7 +483,7 @@
             </div>
 
             <div class="res-meta">
-                <strong>Автор:</strong> <span id="resAuthor"></span> &nbsp;|&nbsp; 
+                <strong>Автор:</strong> <span id="resAuthor"></span> &nbsp;|&nbsp;
                 <strong>Год издания:</strong> <span id="resYear"></span>
             </div>
 
@@ -497,12 +497,13 @@
 
     <footer>
         <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
     </footer>
 
     <!-- СКРИПТЫ -->
     <script>
         // --- 1. БАЗА ДАННЫХ ---
-        const resources = [
+const resources = [
             {
                 id: 1,
                 title: "Основы Python для начинающих",
@@ -511,7 +512,8 @@
                 fullDesc: "Этот курс предназначен для тех, кто никогда не программировал. Мы разберем переменные, типы данных, условные операторы, циклы и функции. В конце курса вы напишете своего первого Telegram-бота.",
                 author: "Гвидо ван Россум (адаптация)",
                 year: "2024",
-                icon: "🐍"
+                icon: "🐍",
+                file: "python-basics.html"
             },
             {
                 id: 2,
@@ -521,7 +523,8 @@
                 fullDesc: "Классический учебник по математическому анализу. Первый том охватывает введение в анализ, дифференциальное и интегральное исчисление функций одной переменной. Содержит множество примеров и задач для самостоятельного решения.",
                 author: "Ильин В.А., Позняк Э.Г.",
                 year: "2023",
-                icon: "∫dx"
+                icon: "∫dx",
+                file: "Математический_анализ_Том_1.html"
             },
             {
                 id: 3,
@@ -531,17 +534,19 @@
                 fullDesc: "Курс лекций охватывает сложный и противоречивый период отечественной истории. Рассматриваются революции, мировые войны, период СССР и становление новой России. Особое внимание уделено архивным документам.",
                 author: "Петров Н.Н.",
                 year: "2022",
-                icon: "🏛️"
+                icon: "🏛️",
+                file: "История_России_XX_век.html"
             },
             {
                 id: 4,
                 title: "Механика и кинематика",
                 category: "Физика",
-                desc: "Лабораторный практикум. Законы Ньютона.",
-                fullDesc: "Методические указания к выполнению лабораторных работ по разделу 'Механика'. Включает описание установок, порядок выполнения работ, методы обработки результатов измерений и контрольные вопросы.",
+                desc: "Полное руководство по механике и кинематике. Законы Ньютона, движение тел, кинематические уравнения.",
+                fullDesc: "Подробное изучение механики и кинематики с примерами и задачами. Включает основные понятия, типы движения, кинематические уравнения и примеры решения задач.",
                 author: "Кафедра общей физики",
-                year: "2025",
-                icon: "⚛️"
+                year: "2026",
+                icon: "⚛️",
+                file: "Механика_и_кинематика.html"
             },
             {
                 id: 5,
@@ -551,7 +556,8 @@
                 fullDesc: "Пособие для начинающих веб-разработчиков. Вы узнаете, как устроена веб-страница, как стилизовать элементы, работать с Flexbox и Grid Layout, а также как сделать сайт адаптивным для мобильных устройств.",
                 author: "MDN Community",
                 year: "2024",
-                icon: "🌐"
+                icon: "🌐",
+                file: "html-css-guide.html"
             },
             {
                 id: 6,
@@ -561,9 +567,10 @@
                 fullDesc: "Учебное пособие раскрывает основные макроэкономические показатели. Рассматриваются модели равновесия, денежно-кредитная и фискальная политика государства.",
                 author: "Смирнов А.В.",
                 year: "2023",
-                icon: "📈"
+                icon: "📈",
+                file: "macroeconomics.html"
             },
-            {
+{
                 id: 7,
                 title: "Дискретная математика",
                 category: "Математика",
@@ -571,7 +578,8 @@
                 fullDesc: "Конспект лекций. Темы: множества, бинарные отношения, булева алгебра, основы теории графов, комбинаторика. Необходим для студентов IT-специальностей.",
                 author: "Новиков Ф.А.",
                 year: "2021",
-                icon: "🎲"
+                icon: "🎲",
+                file: "discrete-math.html"
             },
             {
                 id: 8,
@@ -581,29 +589,30 @@
                 fullDesc: "Фундаментальный курс для программистов. Анализ сложности алгоритмов (Big O), сортировки, поиск, динамическое программирование, графовые алгоритмы.",
                 author: "Кормен Т.",
                 year: "2024",
-                icon: "💻"
-            }
+                icon: "💻",
+                file: "algorithms.html"
+            },
         ];
 
         const newsData = [
-            { 
+            {
                 id: 1,
-                title: "Обновлен список литературы", 
-                date: "20.05.2025", 
+                title: "Обновлен список литературы",
+                date: "20.05.2025",
                 short: "Кафедра обновила методические указания.",
                 full: "Кафедра «Кибернетики» сообщает об обновлении списка рекомендованной литературы для подготовки к курсовым работам. В новый список включены актуальные издания 2024-2025 годов."
             },
-            { 
+            {
                 id: 2,
-                title: "Конференция 'Наука 2025'", 
-                date: "18.05.2025", 
+                title: "Конференция 'Наука 2025'",
+                date: "18.05.2025",
                 short: "Приглашаются студенты всех курсов.",
                 full: "1 июня 2025 года состоится ежегодная студенческая научно-практическая конференция. Принимаются доклады по секциям IT и Экономики."
             },
-            { 
+            {
                 id: 3,
-                title: "Доступ к электронным книгам", 
-                date: "15.05.2025", 
+                title: "Доступ к электронным книгам",
+                date: "15.05.2025",
                 short: "Библиотека открыла доступ к базе Springer.",
                 full: "Научная библиотека университета получила тестовый доступ к полнотекстовой коллекции электронных книг издательства Springer Nature."
             }
@@ -622,7 +631,7 @@
         function renderResources(data) {
             const grid = document.getElementById('resourcesGrid');
             const countSpan = document.getElementById('count');
-            
+
             grid.innerHTML = '';
             countSpan.textContent = data.length;
 
@@ -641,7 +650,7 @@
                         <div class="card-tag">${item.category}</div>
                         <h3 class="card-title">${item.title}</h3>
                         <p class="card-desc">${item.desc}</p>
-                        <button class="card-btn" onclick="openResourceModal(${item.id})">Подробнее</button>
+                        ${item.file ? `<a href="${item.file}" class="card-btn">Подробнее</a>` : `<button class="card-btn" onclick="openResourceModal(${item.id})">Подробнее</button>`}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -677,21 +686,6 @@
             }
         }
 
-        // Открытие ресурса (КНИГИ/КУРСА)
-        function openResourceModal(id) {
-            const item = resources.find(r => r.id === id);
-            if (item) {
-                document.getElementById('resTitle').textContent = item.title;
-                document.getElementById('resCategory').textContent = item.category;
-                document.getElementById('resIcon').textContent = item.icon;
-                document.getElementById('resAuthor').textContent = item.author;
-                document.getElementById('resYear').textContent = item.year;
-                document.getElementById('resFullDesc').textContent = item.fullDesc;
-                
-                document.getElementById('resourceModal').style.display = "block";
-            }
-        }
-
         // Закрытие любого модального окна по ID
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
@@ -707,8 +701,8 @@
         // Поиск
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = resources.filter(item => 
-                item.title.toLowerCase().includes(query) || 
+            const filtered = resources.filter(item =>
+                item.title.toLowerCase().includes(query) ||
                 item.category.toLowerCase().includes(query) ||
                 item.desc.toLowerCase().includes(query)
             );

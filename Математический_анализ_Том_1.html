@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Математический анализ: Том 1</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --header-bg: #e3f2fd;
+            --primary-color: #5c86ad;
+            --accent-color: #81c784;
+            --text-main: #37474f;
+            --text-secondary: #78909c;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        button { font-family: inherit; }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--primary-color);
+            border: 1px solid #dcebf7;
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            overflow: hidden;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        aside .widget {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+.categories li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .categories li:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .banner {
+            background-color: #fff3e0;
+            border: 1px dashed #ffb74d;
+            text-align: center;
+            padding: 15px;
+        }
+        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        .download-btn {
+            background: none;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .download-btn:hover { background: #333; color: #fff; }
+
+        main {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-header {
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px 0;
+            font-size: 24px;
+        }
+
+        .article-content p {
+            margin: 15px 0;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .article-content li {
+            margin: 8px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e3f2fd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--header-bg);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .download-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .download-section h3 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .download-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background-color: #66bb6a;
+        }
+
+        footer {
+            background-color: #37474f;
+            color: #cfd8dc;
+            padding: 40px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .article-footer { flex-direction: column; gap: 15px; }
+            .download-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                </svg>
+                <span>EduSearch</span>
+            </div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <div class="widget">
+                <h3>Категории</h3>
+                <ul class="categories" id="categoryList">
+                    <li onclick="filterByCategory('Все')">Все материалы</li>
+                    <li onclick="filterByCategory('Программирование')">Программирование</li>
+                    <li onclick="filterByCategory('Математика')">Математика</li>
+                    <li onclick="filterByCategory('Физика')">Физика</li>
+                    <li onclick="filterByCategory('История')">История</li>
+                    <li onclick="filterByCategory('Экономика')">Экономика</li>
+                </ul>
+            </div>
+            <div class="widget banner">
+                <strong>Курсовая на 5?</strong>
+                <p>Методичка по оформлению уже на сайте!</p>
+                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
+            </div>
+        </aside>
+
+        <main>
+            <div class="article-header">
+                <h1 class="article-title">Математический анализ: Том 1</h1>
+                <div class="article-meta">
+                    <span>Автор: Ильин В.А., Позняк Э.Г.</span>
+                    <span>Категория: Математика</span>
+                    <span>Дата: 2023</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <h2>Введение</h2>
+                <p>Математический анализ - это раздел математики, изучающий пределы, непрерывность, дифференцирование и интегрирование функций. Этот учебник предназначен для студентов вузов, изучающих математику, физику, инженерные и экономические специальности.</p>
+
+                <h2>Глава 1. Основные понятия</h2>
+                <p>В этой главе мы рассмотрим основные понятия математического анализа, необходимые для дальнейшего изучения.</p>
+
+                <h3>1.1. Множества и функции</h3>
+                <p>Множество - это совокупность элементов, обладающих определенным свойством. Функция - это правило, по которому каждому элементу из одного множества (области определения) ставится в соответствие единственный элемент из другого множества (области значений).</p>
+
+                <h3>1.2. Последовательности</h3>
+                <p>Последовательность - это функция, областью определения которой является множество натуральных чисел. Последовательность {aₙ} сходится к пределу L, если для любого ε > 0 существует номер N такой, что для всех n > N выполняется неравенство |aₙ - L| < ε.</p>
+
+                <h2>Глава 2. Дифференциальное исчисление</h2>
+                <p>Дифференциальное исчисление изучает скорость изменения функций и их локальное поведение.</p>
+
+                <h3>2.1. Предел функции</h3>
+                <p>Предел функции f(x) при x стремящемся к a равен L, если для любого ε > 0 существует δ > 0 такое, что для всех x, удовлетворяющих неравенству 0 < |x - a| < δ, выполняется неравенство |f(x) - L| < ε.</p>
+
+                <h3>2.2. Непрерывность</h3>
+                <p>Функция f(x) непрерывна в точке a, если выполняются три условия:
+                    <ol>
+                        <li>f(a) определена</li>
+                        <li>lim(x→a) f(x) существует</li>
+                        <li>lim(x→a) f(x) = f(a)</li>
+                    </ol>
+                </p>
+
+                <h3>2.3. Производная</h3>
+                <p>Производная функции f(x) в точке a определяется как предел:
+                    f'(a) = lim(h→0) [f(a+h) - f(a)]/h
+                </p>
+
+                <h2>Глава 3. Интегральное исчисление</h2>
+                <p>Интегральное исчисление изучает накопление величин и площади под кривыми.</p>
+
+                <h3>3.1. Определенный интеграл</h3>
+                <p>Определенный интеграл от функции f(x) на отрезке [a, b] определяется как предел интегральных сумм Римана при стремлении числа разбиений к бесконечности.</p>
+
+                <h3>3.2. Неопределенный интеграл</h3>
+                <p>Неопределенный интеграл от функции f(x) - это множество всех первообразных функций этой функции, обозначается как ∫f(x)dx.</p>
+
+                <h2>Глава 4. Приложения дифференциального и интегрального исчисления</h2>
+                <p>В этой главе мы рассмотрим основные приложения методов математического анализа.</p>
+
+                <h3>4.1. Экстремумы функций</h3>
+                <p>Для нахождения экстремумов функции f(x) необходимо найти точки, где f'(x) = 0 или f'(x) не существует, а затем проверить эти точки с помощью достаточных условий.</p>
+
+                <h3>4.2. Площадь и объем</h3>
+                <p>Площадь под кривой y = f(x) на отрезке [a, b] вычисляется как ∫[a,b] f(x)dx. Объем тела вращения вычисляется по формулам Паппуса-Гюльдена.</p>
+
+                <h2>Глава 5. Ряды</h2>
+                <p>Ряды - это суммы бесконечных последовательностей. Они играют важную роль в математическом анализе и его приложениях.</p>
+
+                <h3>5.1. Числовые ряды</h3>
+                <p>Числовой ряд - это выражение вида Σaₙ = a₁ + a₂ + a₃ + ... . Ряд сходится, если предел последовательности его частичных сумм существует и конечен.</p>
+
+                <h3>5.2. Степенные ряды</h3>
+                <p>Степенной ряд имеет вид Σaₙ(x - x₀)ⁿ. Он сходится в некоторой окрестности точки x₀ и может быть использован для приближенного вычисления функций.</p>
+
+                <h2>Заключение</h2>
+                <p>Математический анализ является фундаментальным разделом математики, лежащим в основе многих прикладных наук. Освоение его методов открывает широкие возможности для решения практических задач в физике, инженерии, экономике и других областях.</p>
+
+                <blockquote>
+                    "Математика - это не только инструмент для решения задач, но и язык, на котором записана природа." - Ричард Фейнман
+                </blockquote>
+            </div>
+
+            <div class="article-footer">
+                <div class="article-tags">
+                    <span class="tag">Математика</span>
+                    <span class="tag">Анализ</span>
+                    <span class="tag">Учебник</span>
+                    <span class="tag">ВУЗ</span>
+                </div>
+                <span>Просмотров: 1,234</span>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
+        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

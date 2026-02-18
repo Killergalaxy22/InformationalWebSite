@@ -457,7 +457,7 @@
     <!-- ШАПКА -->
     <header role="banner">
         <div class="header-container">
-            <a href="/" class="logo" aria-label="EduSearch - на главную">
+            <a href="/InformationalWebSite" class="logo" aria-label="EduSearch - на главную">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
                 </svg>
@@ -816,14 +816,60 @@
             }
         }
 
-        document.getElementById('searchInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') performSearch();
+        const searchInputEl = document.getElementById('searchInput');
+
+        let searchLock = false;
+
+        function setQueryParam(q) {
+            const url = new URL(window.location.href);
+            if (q && q.trim()) url.searchParams.set('q', q.trim());
+            else url.searchParams.delete('q');
+            history.replaceState(null, '', url.toString());
+        }
+
+        function getQueryParam() {
+            const url = new URL(window.location.href);
+            return url.searchParams.get('q') || '';
+        }
+
+        function performSearch() {
+            if (searchLock) return;
+            searchLock = true;
+            setTimeout(() => (searchLock = false), 150);
+
+            const queryRaw = searchInputEl.value || '';
+            const query = queryRaw.toLowerCase().trim();
+
+            setQueryParam(queryRaw);
+
+            const filtered = resources.filter(item =>
+                item.title.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query) ||
+                item.desc.toLowerCase().includes(query)
+            );
+
+            renderResources(filtered);
+            document.getElementById('resultsTitle').textContent =
+                query ? `Результаты поиска: "${queryRaw.trim()}"` : "Все материалы";
+        }
+
+        searchInputEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
         });
 
         // Инициализация
         window.onload = function() {
             renderResources(resources);
             renderNews();
+
+            const q = getQueryParam();
+            if (q) {
+                searchInputEl.value = q;
+                performSearch();
+            }
         };
 
     </script>

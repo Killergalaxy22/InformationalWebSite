@@ -108,9 +108,10 @@ document.addEventListener('click', (e) => {
     if (!link) return;
 
     const url = new URL(link.href, window.location.origin);
-    // Сравниваем только поисковые параметры, если пути ведут на один и тот же файл
-    const isSamePage = url.pathname === window.location.pathname || 
-                       (url.pathname.replace('index.html', '') === window.location.pathname.replace('index.html', ''));
+    
+    // Нормализуем пути: убираем 'index.html' и финальные слеши для сравнения
+    const normalize = p => p.replace(/index\.html$/, '').replace(/\/$/, '');
+    const isSamePage = normalize(url.pathname) === normalize(window.location.pathname);
 
     if (isSamePage && url.searchParams.has('highlight')) {
         e.preventDefault();
@@ -162,15 +163,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Глобальный обработчик категорий для всех страниц
     window.filterByCategory = (category) => {
         const path = window.location.pathname;
-        const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path.endsWith('InformationalWebSite');
+        const isHomePage = path.endsWith('/') || path.endsWith('index.html') || !path.split('/').pop().includes('.');
         
         if (isHomePage) {
-            // Если мы на главной, вызываем локальную функцию
             if (typeof window.localFilterByCategory === 'function') {
                 window.localFilterByCategory(category);
             }
         } else {
-            // Если мы в статье, уходим на главную с параметром категории (относительный путь)
+            // Используем относительный путь к index.html в той же папке
             window.location.href = `index.html?category=${encodeURIComponent(category)}`;
         }
     };
@@ -183,8 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- ЛОКАЛЬНЫЙ ПОИСК ДЛЯ СТАТЕЙ ---
     const path = window.location.pathname;
-    // Проверка учитывает корень, index.html и имя репозитория без слеша в конце
-    const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path.split('/').pop() === 'InformationalWebSite';
+    // Главная, если путь пустой, заканчивается на / или на index.html
+    const isHomePage = path.endsWith('/') || path.endsWith('index.html') || !path.split('/').pop().includes('.');
 
     if (!isHomePage) {
         const container = document.querySelector('.container');
@@ -210,12 +210,12 @@ document.addEventListener("DOMContentLoaded", () => {
             // Вставляем ПЕРЕД контейнером (снаружи main)
             container.parentNode.insertBefore(searchSection, container);
 
-            // Загрузка зависимостей
+            // Загрузка зависимостей (убраны слеши в начале имен файлов)
             const scripts = ['resources.js', 'semantic-db.js', 'semantic-search.js'];
             scripts.forEach(src => {
-                if (!document.querySelector(`script[src="${src}"]`)) {
+                if (!document.querySelector(`script[src$="${src}"]`)) {
                     const s = document.createElement('script');
-                    s.src = src;
+                    s.src = src; // Загрузка из текущей директории
                     if (src.includes('search')) s.type = 'module';
                     document.head.appendChild(s);
                 }

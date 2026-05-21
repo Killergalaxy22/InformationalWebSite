@@ -113,6 +113,7 @@ async function initSemanticSearch() {
     const q = window.getQueryParam();
     if (q) {
         document.getElementById('searchInput').value = q;
+        // Вызываем без параметров, так как performSearch теперь сам определит контекст
         window.performSearch();
     }
 }
@@ -122,6 +123,21 @@ window.performSearch = async function(targetArticleId = null) {
     const queryRaw = document.getElementById('searchInput').value;
     const query = queryRaw.trim();
     
+    // Определяем контекст: главная или статья
+    const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
+    
+    // Если мы в статье и ID не передан, находим его по имени файла
+    if (!isHomePage && targetArticleId === null) {
+        const currentFile = window.location.pathname.split('/').pop();
+        const article = (window.resources || []).find(r => r.file === currentFile);
+        if (article) {
+            targetArticleId = article.id;
+        } else {
+            // Если файл не найден в базе, ставим несуществующий ID, чтобы поиск не стал глобальным
+            targetArticleId = -999; 
+        }
+    }
+
     window.setQueryParam(queryRaw);
 
     if (!query) {
@@ -133,7 +149,7 @@ window.performSearch = async function(targetArticleId = null) {
     }
 
     if (!extractor) {
-        alert("Нейросеть еще загружается, подождите пару секунд.");
+        // alert("Нейросеть еще загружается, подождите пару секунд.");
         return;
     }
 

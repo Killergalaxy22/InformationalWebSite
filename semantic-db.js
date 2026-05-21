@@ -65,15 +65,17 @@ class SemanticDB {
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction([STORE_NAME], 'readonly');
             const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
+            
+            let request;
+            if (targetArticleId !== null) {
+                const index = store.index('articleId');
+                // Если передан ID, используем индекс. Если ID = -999, вернет пустой список.
+                request = index.getAll(IDBKeyRange.only(targetArticleId));
+            } else {
+                request = store.getAll();
+            }
 
-            request.onsuccess = () => {
-                let results = request.result;
-                if (targetArticleId !== null) {
-                    results = results.filter(r => r.articleId === targetArticleId);
-                }
-                resolve(results);
-            };
+            request.onsuccess = () => resolve(request.result || []);
             request.onerror = (event) => reject(event.target.error);
         });
     }

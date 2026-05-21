@@ -123,10 +123,10 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const components = [
-        { url: '/header.html', id: 'header-placeholder' },
-        { url: '/categories.html', id: 'categories-placeholder' },
-        { url: '/banner.html', id: 'banner-placeholder' },
-        { url: '/footer.html', id: 'footer-placeholder' }
+        { url: 'header.html', id: 'header-placeholder' },
+        { url: 'categories.html', id: 'categories-placeholder' },
+        { url: 'banner.html', id: 'banner-placeholder' },
+        { url: 'footer.html', id: 'footer-placeholder' }
     ];
 
     components.forEach(comp => {
@@ -158,7 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Глобальный обработчик категорий для всех страниц
     window.filterByCategory = (category) => {
-        const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+        const path = window.location.pathname;
+        const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '';
         
         if (isHomePage) {
             // Если мы на главной, вызываем локальную функцию (она будет определена в index.html)
@@ -178,7 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- ЛОКАЛЬНЫЙ ПОИСК ДЛЯ СТАТЕЙ ---
-    const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+    const path = window.location.pathname;
+    const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '';
     
     if (!isHomePage) {
         const container = document.querySelector('.container');
@@ -205,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container.parentNode.insertBefore(searchSection, container);
 
             // Загрузка зависимостей
-            const scripts = ['/resources.js', '/semantic-db.js', '/semantic-search.js'];
+            const scripts = ['resources.js', 'semantic-db.js', 'semantic-search.js'];
             scripts.forEach(src => {
                 if (!document.querySelector(`script[src="${src}"]`)) {
                     const s = document.createElement('script');

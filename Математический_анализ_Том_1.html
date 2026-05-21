@@ -293,47 +293,14 @@
             .header-container { flex-direction: column; gap: 10px; }
         }
     </style>
+    <script src="/header-loader.js" defer></script>
 </head>
 <body>
-
-    <header itemscope itemtype="http://schema.org/WPHeader">
-        <div class="header-container">
-            <a href="/InformationalWebSite" class="logo" title="На главную EduSearch">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
-                </svg>
-                <span>EduSearch</span>
-            </a>
-            <div class="clock" id="clock" aria-label="Текущее время">00:00:00</div>
-        </div>
-    </header>
-
-    <div class="ticker-wrap" role="alert">
-        <div class="ticker">
-            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
-        </div>
-    </div>
-
+    <div id="header-placeholder"></div>
     <div class="container">
         <aside>
-            <nav class="widget" aria-label="Категории материалов">
-                <h3>Категории</h3>
-                <!-- SEO: Использование ссылок вместо onclick для лучшей индексации -->
-                <ul class="categories">
-                    <li><a href="/InformationalWebSite" title="Все учебные материалы">Все материалы</a></li>
-                    <li><a href="/category/programming" title="Учебники по программированию">Программирование</a></li>
-                    <li><a href="/category/math" title="Учебники по математике">Математика</a></li>
-                    <li><a href="/category/physics" title="Учебники по физике">Физика</a></li>
-                    <li><a href="/category/history" title="Материалы по истории">История</a></li>
-                    <li><a href="/category/economics" title="Материалы по экономике">Экономика</a></li>
-                </ul>
-            </nav>
-            
-            <div class="widget banner">
-                <strong>Курсовая на 5?</strong>
-                <p>Методичка по оформлению уже на сайте!</p>
-                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn" title="Скачать методические указания PDF">Открыть PDF</a>
-            </div>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
         </aside>
 
         <main>
@@ -437,19 +404,25 @@
             </article>
         </main>
     </div>
-
-    <footer itemscope itemtype="http://schema.org/WPFooter">
-        <p>&copy; 2025 <span itemprop="copyrightHolder">EduSearch</span>. Учебный портал ВГТУ.</p>
-        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script>
         function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
+            const clockEl = document.getElementById('clock');
+            if (clockEl) {
+                const now = new Date();
+                clockEl.textContent = now.toLocaleTimeString('ru-RU');
+            }
         }
         setInterval(updateClock, 1000);
-        updateClock();
+        
+        // Ожидание появления динамически загруженного элемента часов
+        const clockInitInterval = setInterval(() => {
+            if (document.getElementById('clock')) {
+                updateClock();
+                clearInterval(clockInitInterval);
+            }
+        }, 100);
     </script>
 </body>
 </html>

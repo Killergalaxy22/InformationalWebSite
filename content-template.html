@@ -275,8 +275,9 @@
             .download-options { grid-template-columns: 1fr; }
         }
     </style>
+<script src="/header-loader.js" defer></script>
 </head>
-<body>
+<body>\n    <div id="header-placeholder"></div>
 
     <header>
         <div class="header-container">
@@ -297,24 +298,7 @@
     </div>
 
     <div class="container">
-        <aside>
-            <div class="widget">
-                <h3>Категории</h3>
-                <ul class="categories" id="categoryList">
-                    <li onclick="filterByCategory('Все')">Все материалы</li>
-                    <li onclick="filterByCategory('Программирование')">Программирование</li>
-                    <li onclick="filterByCategory('Математика')">Математика</li>
-                    <li onclick="filterByCategory('Физика')">Физика</li>
-                    <li onclick="filterByCategory('История')">История</li>
-                    <li onclick="filterByCategory('Экономика')">Экономика</li>
-                </ul>
-            </div>
-            <div class="widget banner">
-                <strong>Курсовая на 5?</strong>
-                <p>Методичка по оформлению уже на сайте!</p>
-                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
-            </div>
-        </aside>
+        <aside>\n            <div id="categories-placeholder"></div>\n            <div id="banner-placeholder"></div>\n        </aside>
 
         <main>
             <div class="article-header">
@@ -360,10 +344,7 @@
         </main>
     </div>
 
-    <footer>
-        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
-        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script>
         function updateClock() {

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантический поиск в браузере</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .suggestions {
+            margin: 10px 0;
+        }
+        .suggestions button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            font-size: 0.9em;
+            background: #e1e1e1;
+            border: none;
+            border-radius: 3px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .score {
+            font-weight: bold;
+            color: #0066cc;
+        }
+    </style>
+<script src="/header-loader.js" defer></script>
+</head>
+<body>\n    <div id="header-placeholder"></div>
+
+    <h1>Семантический поиск</h1>
+    
+    <div id="status" class="status">Загрузка библиотеки...</div>
+
+    <div class="container">
+        <h3>Исходный текст (будет разбит на чанки по 1-5 предложений):</h3>
+        <textarea id="documents">
+Солнечная система состоит из Солнца и объектов, вращающихся вокруг него.
+Быстрая коричневая лиса прыгает через ленивую собаку.
+Чтобы испечь шоколадный торт, вам понадобятся мука, сахар, какао-порошок и яйца.
+Искусственный интеллект и машинное обучение трансформируют современные технологии.
+Столица Франции — Париж, известный своим искусством, модой и гастрономией.
+Python — популярный язык программирования, используемый для науки о данных и веб-разработки.
+Ежедневный бег улучшает здоровье сердечно-сосудистой системы и повышает уровень энергии.
+        </textarea>
+
+        <div class="search-box">
+            <input type="text" id="query" placeholder="Введите поисковый запрос..." disabled>
+            <button id="search-btn" disabled>Искать</button>
+        </div>
+
+        <div class="suggestions">
+            <strong>Тестовые запросы:</strong>
+            <button onclick="setQuery('рецепт десерта')">рецепт десерта</button>
+            <button onclick="setQuery('астрономия и космос')">астрономия и космос</button>
+            <button onclick="setQuery('написание кода')">написание кода</button>
+            <button onclick="setQuery('фитнес и здоровье')">фитнес и здоровье</button>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <!-- Подключение Transformers.js версии 2 через CDN -->
+    <script type="module">
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+
+        // Отключаем локальные пути, загружаем модели из репозитория Hugging Face
+        env.allowLocalModels = false;
+
+        const statusDiv = document.getElementById('status');
+        const queryInput = document.getElementById('query');
+        const searchBtn = document.getElementById('search-btn');
+        const documentsArea = document.getElementById('documents');
+        const resultsDiv = document.getElementById('results');
+
+        let extractor;
+        let documentEmbeddings = [];
+        let documents = [];
+
+        // Функция вычисления косинусного сходства
+        function cosineSimilarity(arg1, arg2) {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            for (let i = 0; i < arg1.length; i++) {
+                dotProduct += arg1[i] * arg2[i];
+                normA += arg1[i] * arg1[i];
+                normB += arg2[i] * arg2[i];
+            }
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+
+        async function init() {
+            try {
+                statusDiv.innerText = 'Загрузка модели (около 118 МБ)...';
+                // Инициализируем пайплайн с мультиязычной моделью, отлично понимающей русский
+                extractor = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2');
+                statusDiv.innerText = 'Модель загружена. Индексация документов...';
+                
+                await indexDocuments();
+                
+                statusDiv.innerText = 'Готово к поиску.';
+                queryInput.disabled = false;
+                searchBtn.disabled = false;
+            } catch (error) {
+                statusDiv.innerText = 'Ошибка инициализации: ' + error.message;
+                console.error(error);
+            }
+        }
+
+        async function indexDocuments() {
+            // 1. Склеиваем случайные переносы строк (после запятых, скобок, обычных слов), 
+            // чтобы они не разрывали предложение. Оставляем переносы только после знаков препинания.
+            const rawText = documentsArea.value.replace(/([^.!?])\s*[\r\n]+/g, '$1 ');
+            const segmenter = new Intl.Segmenter('ru', { granularity: 'sentence' });
+            
+            documents = [];
+            let currentChunk = [];
+            
+            for (const { segment } of segmenter.segment(rawText)) {
+                const trimmed = segment.trim();
+                if (!trimmed) continue;
+                
+                currentChunk.push(trimmed);
+                if (currentChunk.length === 5) {
+                    documents.push(currentChunk.join(' '));
+                    currentChunk = [];
+                }
+            }
+            if (currentChunk.length > 0) {
+                documents.push(currentChunk.join(' '));
+            }
+
+            documentEmbeddings = [];
+            
+            for (const doc of documents) {
+                const output = await extractor(doc, { pooling: 'mean', normalize: true });
+                documentEmbeddings.push(Array.from(output.data));
+            }
+        }
+
+        async function performSearch() {
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            statusDiv.innerText = 'Поиск...';
+            
+            // Если текст был изменен, переиндексируем
+            await indexDocuments();
+
+            const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
+            const queryEmbedding = Array.from(queryOutput.data);
+
+            const scores = documents.map((doc, idx) => {
+                const similarity = cosineSimilarity(queryEmbedding, documentEmbeddings[idx]);
+                return { doc, score: similarity };
+            });
+
+            // Сортировка по убыванию сходства
+            scores.sort((a, b) => b.score - a.score);
+
+            resultsDiv.innerHTML = '<h3>Результаты поиска:</h3>';
+            scores.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `<span class="score">[Сходство: ${(item.score * 100).toFixed(1)}%]</span> ${item.doc}`;
+                resultsDiv.appendChild(div);
+            });
+
+            statusDiv.innerText = 'Готово к поиску.';
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        queryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        window.setQuery = function(text) {
+            queryInput.value = text;
+            performSearch();
+        }
+
+        init();
+    </script>
+</body>
+</html>

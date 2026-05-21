@@ -54,6 +54,8 @@
     }
     </script>
 
+    <script src="/header-loader.js" defer></script>
+
     <style>
         /* --- 1. ОСНОВНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ --- */
         :root {
@@ -454,25 +456,8 @@
 </head>
 <body>
 
-    <!-- ШАПКА -->
-    <header role="banner">
-        <div class="header-container">
-            <a href="/InformationalWebSite" class="logo" aria-label="EduSearch - на главную">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
-                </svg>
-                <span>EduSearch</span>
-            </a>
-            <div class="clock" id="clock" aria-label="Текущее время">00:00:00</div>
-        </div>
-    </header>
-
-    <!-- БЕГУЩАЯ СТРОКА -->
-    <div class="ticker-wrap" role="complementary" aria-label="Важные объявления">
-        <div class="ticker">
-            !!! Внимание: Доступны новые методические указания по Информатике за 2025 год +++ Открыта запись на факультатив по Python +++ Библиотека работает до 20:00 в период сессии !!!
-        </div>
-    </div>
+    <!-- ДИНАМИЧЕСКАЯ ШАПКА И БЕГУЩАЯ СТРОКА -->
+    <div id="header-placeholder"></div>
 
     <!-- ПОИСК -->
     <section class="hero" aria-labelledby="hero-title">
@@ -487,24 +472,7 @@
 
     <!-- КОНТЕНТ -->
     <div class="container">
-        <aside>
-            <nav class="widget" aria-labelledby="cat-title">
-                <h3 id="cat-title">Категории</h3>
-                <ul class="categories" id="categoryList">
-                    <li onclick="filterByCategory('Все')" tabindex="0" role="button">Все материалы</li>
-                    <li onclick="filterByCategory('Программирование')" tabindex="0" role="button">Программирование</li>
-                    <li onclick="filterByCategory('Математика')" tabindex="0" role="button">Математика</li>
-                    <li onclick="filterByCategory('Физика')" tabindex="0" role="button">Физика</li>
-                    <li onclick="filterByCategory('История')" tabindex="0" role="button">История</li>
-                    <li onclick="filterByCategory('Экономика')" tabindex="0" role="button">Экономика</li>
-                </ul>
-            </nav>
-            <div class="widget banner" role="complementary">
-                <strong>Курсовая на 5?</strong>
-                <p>Методичка по оформлению уже на сайте!</p>
-                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn" rel="nofollow">Открыть PDF</a>
-            </div>
-        </aside>
+        <aside><div id="categories-placeholder"></div><div id="banner-placeholder"></div></aside>
 
         <main>
             <div class="results-header">
@@ -562,10 +530,7 @@
         </div>
     </div>
 
-    <footer role="contentinfo">
-        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
-        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <!-- СКРИПТЫ -->
     <script>
@@ -686,13 +651,6 @@
         ];
 
         // --- 2. ФУНКЦИИ ---
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('ru-RU');
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
 
         // Рендеринг карточек с микроразметкой Schema.org (LearningResource)
         function renderResources(data) {

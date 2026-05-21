@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантический поиск в браузере</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .suggestions {
+            margin: 10px 0;
+        }
+        .suggestions button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            font-size: 0.9em;
+            background: #e1e1e1;
+            border: none;
+            border-radius: 3px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .score {
+            font-weight: bold;
+            color: #0066cc;
+        }
+    </style>
+<script src="/header-loader.js" defer></script>
+</head>
+<body>\n    <div id="header-placeholder"></div>
+
+    <h1>Семантический поиск</h1>
+    
+    <div id="status" class="status">Загрузка библиотеки...</div>
+
+    <div class="container">
+        <h3>Исходный текст (каждая строка — отдельный документ):</h3>
+        <textarea id="documents">
+The solar system consists of the Sun and the objects that orbit it.
+A fast brown fox jumps over the lazy dog.
+To bake a chocolate cake, you need flour, sugar, cocoa powder, and eggs.
+Artificial intelligence and machine learning are transforming modern technology.
+The capital of France is Paris, known for its art, fashion, and gastronomy.
+Python is a popular programming language used for data science and web development.
+Running daily improves cardiovascular health and boosts energy levels.
+        </textarea>
+
+        <div class="search-box">
+            <input type="text" id="query" placeholder="Введите поисковый запрос на английском..." disabled>
+            <button id="search-btn" disabled>Искать</button>
+        </div>
+
+        <div class="suggestions">
+            <strong>Тестовые запросы:</strong>
+            <button onclick="setQuery('recipe for dessert')">recipe for dessert</button>
+            <button onclick="setQuery('astronomy and space planets')">astronomy and space planets</button>
+            <button onclick="setQuery('software development coding')">software development coding</button>
+            <button onclick="setQuery('active lifestyle and fitness')">active lifestyle and fitness</button>
+        </div>
+
+        <div id="answer-box" class="status" style="display: none; background-color: #e6f2ff; border-left: 4px solid #0066cc;"></div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <!-- Подключение Transformers.js версии 2 через CDN -->
+    <script type="module">
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+
+        // Отключаем локальные пути, загружаем модели из репозитория Hugging Face
+        env.allowLocalModels = false;
+
+        const statusDiv = document.getElementById('status');
+        const queryInput = document.getElementById('query');
+        const searchBtn = document.getElementById('search-btn');
+        const documentsArea = document.getElementById('documents');
+        const resultsDiv = document.getElementById('results');
+
+        let extractor;
+        let generator;
+        let documentEmbeddings = [];
+        let documents = [];
+
+        // Функция вычисления косинусного сходства
+        function cosineSimilarity(arg1, arg2) {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            for (let i = 0; i < arg1.length; i++) {
+                dotProduct += arg1[i] * arg2[i];
+                normA += arg1[i] * arg1[i];
+                normB += arg2[i] * arg2[i];
+            }
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+
+        async function init() {
+            try {
+                statusDiv.innerText = 'Загрузка моделей (эмбеддинги и LLM, около 350 МБ)...';
+                // Инициализируем пайплайн извлечения признаков с легкой моделью
+                extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+                // Инициализируем тяжелую LLM для генерации сводки (RAG)
+                generator = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-783M');
+                statusDiv.innerText = 'Модели загружены. Индексация документов...';
+                
+                await indexDocuments();
+                
+                statusDiv.innerText = 'Готово к поиску.';
+                queryInput.disabled = false;
+                searchBtn.disabled = false;
+            } catch (error) {
+                statusDiv.innerText = 'Ошибка инициализации: ' + error.message;
+                console.error(error);
+            }
+        }
+
+        async function indexDocuments() {
+            documents = documentsArea.value.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            documentEmbeddings = [];
+            
+            for (const doc of documents) {
+                const output = await extractor(doc, { pooling: 'mean', normalize: true });
+                documentEmbeddings.push(Array.from(output.data));
+            }
+        }
+
+        async function performSearch() {
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            statusDiv.innerText = 'Поиск...';
+            
+            // Если текст был изменен, переиндексируем
+            await indexDocuments();
+
+            const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
+            const queryEmbedding = Array.from(queryOutput.data);
+
+            const scores = documents.map((doc, idx) => {
+                const similarity = cosineSimilarity(queryEmbedding, documentEmbeddings[idx]);
+                return { doc, score: similarity };
+            });
+
+            // Сортировка по убыванию сходства
+            scores.sort((a, b) => b.score - a.score);
+
+            const answerBox = document.getElementById('answer-box');
+            answerBox.style.display = 'block';
+            answerBox.innerText = 'Генерация сводки нейросетью... (может занять время)';
+
+            // Берем топ-3 самых релевантных документа для контекста
+            const context = scores.slice(0, 3).map(item => item.doc).join(' ');
+            const prompt = `Based on the following context, provide a short summary and answer the question. Context: ${context} Question: ${query}`;
+
+            // Генерация ответа (наиболее ресурсоёмкая часть)
+            const generated = await generator(prompt, {
+                max_new_tokens: 100,
+                temperature: 0.1,
+                repetition_penalty: 1.2
+            });
+
+            answerBox.innerHTML = `<strong>Краткая сводка:</strong> ${generated[0].generated_text}`;
+
+            resultsDiv.innerHTML = '<h3>Результаты поиска:</h3>';
+            scores.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `<span class="score">[Сходство: ${(item.score * 100).toFixed(1)}%]</span> ${item.doc}`;
+                resultsDiv.appendChild(div);
+            });
+
+            statusDiv.innerText = 'Готово к поиску.';
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        queryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        window.setQuery = function(text) {
+            queryInput.value = text;
+            performSearch();
+        }
+
+        init();
+    </script>
+</body>
+</html>

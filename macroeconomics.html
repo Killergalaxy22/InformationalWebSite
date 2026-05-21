@@ -232,46 +232,19 @@
             .container { grid-template-columns: 1fr; }
         }
     </style>
+    <script src="/header-loader.js" defer></script>
 </head>
 <body>
+    <div id="header-placeholder"></div>
 
-    <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
-                </svg>
-                <span>EduSearch</span>
-            </a>
-            <div class="clock" id="clock">00:00:00</div>
-        </div>
-    </header>
 
-    <div class="ticker-wrap">
-        <div class="ticker">
-            !!! Внимание: Доступны новые методические указания по Экономике за 2025 год +++ Открыта запись на факультатив по Макроанализу +++ Библиотека работает до 20:00 !!!
-        </div>
+    
+
+    
     </div>
 
     <div class="container">
-        <aside>
-            <div class="widget">
-                <h3>Категории</h3>
-                <ul class="categories">
-                    <li><a href="index.html">Все материалы</a></li>
-                    <li><strong>Экономика</strong></li>
-                    <li>Математика</li>
-                    <li>История</li>
-                </ul>
-            </div>
-
-            <!-- ВОЗВРАЩЕННЫЙ БЛОК РЕКЛАМЫ -->
-            <div class="widget banner">
-                <strong>Курсовая на 5?</strong>
-                <p>Методичка по оформлению уже на сайте!</p>
-                <a href="МУ_КР_ТИПАWК.pdf" target="_blank" class="download-btn">Открыть</a>
-            </div>
-        </aside>
+                <aside><div id="categories-placeholder"></div><div id="banner-placeholder"></div></aside>
 
         <main>
             <article>
@@ -323,10 +296,7 @@
         </main>
     </div>
 
-    <footer>
-        <p>&copy; 2025 EduSearch. Учебный портал ВГТУ.</p>
-        <p>Курсовой проект вариант 7: "Разработка информационно-поискового Web-сайта учебных материалов".</p>
-    </footer>
+        <div id="footer-placeholder"></div>
 
     <script>
         function updateClock() {

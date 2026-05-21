@@ -1,3 +1,12 @@
+// Глобальные утилиты для работы с URL (необходимы для semantic-search.js)
+window.getQueryParam = () => new URLSearchParams(window.location.search).get('q') || '';
+window.setQueryParam = (q) => {
+    const url = new URL(window.location.href);
+    if (q && q.trim()) url.searchParams.set('q', q.trim());
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url.toString());
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const components = [
         { url: '/header.html', id: 'header-placeholder' },
@@ -78,6 +87,75 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, 2500);
                 });
             }, 600);
+        }
+    }
+
+    // --- ЛОКАЛЬНЫЙ ПОИСК ДЛЯ СТАТЕЙ ---
+    const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+    
+    if (!isHomePage) {
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            // 1. Создаем контейнер поиска (копия структуры с главной)
+            const searchSection = document.createElement('section');
+            searchSection.className = 'hero';
+            searchSection.style.padding = '30px 20px'; // Чуть компактнее для статей
+            searchSection.innerHTML = `
+                <h2 style="margin-bottom: 15px;">Поиск по текущей статье</h2>
+                <div class="search-box" role="search">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Введите вопрос по тексту статьи...">
+                    <button class="search-btn" id="localSearchBtn">Найти</button>
+                </div>
+                <div id="short-answer-container" style="display: none; max-width: 600px; margin: 20px auto 0; background: #fff; padding: 15px; border-radius: 8px; box-shadow: var(--shadow); text-align: left; border-left: 4px solid var(--accent-color);"></div>
+                <div id="localResults" style="margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <div class="results-header" style="display:none;"><h3 id="resultsTitle"></h3><span id="count" style="display:none;"></span></div>
+                    <div id="resourcesGrid"></div>
+                </div>
+            `;
+            mainContent.insertBefore(searchSection, mainContent.firstChild);
+
+            // 2. Загружаем зависимости (БД, Данные и поисковый движок)
+            // Добавьте '/resources.js' в массив scripts
+            const scripts = ['/resources.js', '/semantic-db.js', '/semantic-search.js'];
+            scripts.forEach(src => {
+                if (!document.querySelector(`script[src="${src}"]`)) {
+                    const s = document.createElement('script');
+                    s.src = src;
+                    // Если это ресурсы, загружаем синхронно перед поиском, если поиск - как модуль
+                    if (src.includes('search')) s.type = 'module';
+                    document.head.appendChild(s);
+                }
+            });
+
+            // 3. Привязываем поиск к текущей статье
+            const performLocalSearch = () => {
+                // Создаем временную функцию рендеринга для локального поиска, если её нет
+                window.renderResources = (data) => {
+                    const grid = document.getElementById('resourcesGrid');
+                    if (grid) grid.innerHTML = ''; // Очистка, так как поиск сам наполнит grid
+                };
+
+                if (typeof window.performSearch === 'function') {
+                    // Находим ID текущей статьи в массиве resources по URL
+                    const currentFile = window.location.pathname.split('/').pop();
+                    const article = window.resources?.find(r => r.file === currentFile);
+                    window.performSearch(article ? article.id : null);
+                    document.querySelector('.results-header').style.display = 'flex';
+                }
+            };
+
+            document.getElementById('localSearchBtn').addEventListener('click', performLocalSearch);
+            document.getElementById('searchInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') performLocalSearch();
+            });
+
+            // 4. Добавляем элемент статуса, если его нет
+            if (!document.getElementById('semantic-status')) {
+                const status = document.createElement('div');
+                status.id = 'semantic-status';
+                status.style.cssText = 'display: none; position: fixed; bottom: 20px; right: 20px; background: var(--primary-color); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999;';
+                document.body.appendChild(status);
+            }
         }
     }
 });

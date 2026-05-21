@@ -177,7 +177,8 @@ window.performSearch = async function(targetArticleId = null) {
 
     // 1. МГНОВЕННЫЙ ВЫВОД: Рендерим результаты векторного поиска сразу
     topMatches.forEach(chunk => {
-        const originalRes = window.resources.find(r => r.id === chunk.articleId);
+        const resList = window.resources || [{ id: chunk.articleId, title: "Текущая статья", file: window.location.pathname }];
+        const originalRes = resList.find(r => r.id === chunk.articleId);
         if (!originalRes) return;
 
         const highlightUrl = `${originalRes.file}?highlight=${encodeURIComponent(chunk.text)}`;

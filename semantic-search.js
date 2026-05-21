@@ -1,10 +1,13 @@
 // semantic-search.js
 import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
 
+// Разрешаем использование кэша браузера для хранения ONNX моделей
 env.allowLocalModels = false;
+env.useBrowserCache = true; 
 
 const statusEl = document.getElementById('semantic-status');
 let extractor = null;
+let qaPipeline = null;
 
 function updateStatus(msg, show = true) {
     if (show) {
@@ -78,8 +81,10 @@ async function fetchArticleText(resource) {
 async function initSemanticSearch() {
     await window.semanticDB.init();
     
-    updateStatus('Загрузка нейросети (WebGPU)...');
+    updateStatus('Загрузка нейросетей (WebGPU)...');
+    // Загрузка и автоматическое кэширование моделей в Cache Storage браузера
     extractor = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', { device: 'webgpu' });
+    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { device: 'webgpu' });
 
     const resources = window.resources || [];
     
@@ -157,38 +162,25 @@ window.performSearch = async function(targetArticleId = null) {
     const shortAnswerContainer = document.getElementById('short-answer-container');
 
     grid.innerHTML = '';
-    grid.style.display = 'block'; // Переключаем сетку на блочное отображение (в строку)
+    grid.style.display = 'block';
     countSpan.textContent = topMatches.length;
+    shortAnswerContainer.style.display = 'none';
+    
+    // Обновляем заголовок сразу, независимо от наличия результатов
+    document.getElementById('resultsTitle').textContent = `Нейропоиск: "${query}"`;
 
     if (topMatches.length === 0) {
         grid.innerHTML = '<p style="text-align: center;">Ничего не найдено :(</p>';
-        shortAnswerContainer.style.display = 'none';
         updateStatus('', false);
         return;
     }
 
-    // Краткий ответ
-    const bestMatch = topMatches[0];
-    const bestRes = window.resources.find(r => r.id === bestMatch.articleId);
-    if (bestMatch.score > 0.0 && bestRes) {
-        const highlightUrl = `${bestRes.file}?highlight=${encodeURIComponent(bestMatch.text)}`;
-        shortAnswerContainer.innerHTML = `
-            <strong style="color: var(--primary-color); display: block; margin-bottom: 5px;">Краткий ответ (уверенность: ${(bestMatch.score * 100).toFixed(1)}%):</strong>
-            <span style="font-size: 14px;">${bestMatch.text}</span>
-            <br><a href="${highlightUrl}" style="font-size: 12px; color: var(--primary-color); text-decoration: underline; margin-top: 8px; display: inline-block;">Перейти к источнику (${bestRes.title})</a>
-        `;
-        shortAnswerContainer.style.display = 'block';
-    } else {
-        shortAnswerContainer.style.display = 'none';
-    }
-
-    // Рендер результатов в виде строк
+    // 1. МГНОВЕННЫЙ ВЫВОД: Рендерим результаты векторного поиска сразу
     topMatches.forEach(chunk => {
         const originalRes = window.resources.find(r => r.id === chunk.articleId);
         if (!originalRes) return;
 
         const highlightUrl = `${originalRes.file}?highlight=${encodeURIComponent(chunk.text)}`;
-        
         const row = document.createElement('div');
         row.className = 'search-result-row';
         row.innerHTML = `
@@ -203,6 +195,27 @@ window.performSearch = async function(targetArticleId = null) {
 
     document.getElementById('resultsTitle').textContent = `Нейропоиск: "${query}"`;
     updateStatus('', false);
+
+    // 2. АСИНХРОННЫЙ ТОЧНЫЙ ОТВЕТ: Запускаем QA-модель без await, чтобы не блокировать UI
+    const bestMatch = topMatches[0];
+    const bestRes = window.resources.find(r => r.id === bestMatch.articleId);
+
+    if (bestMatch.score > 0.01 && bestRes && qaPipeline) {
+        qaPipeline(query, bestMatch.text).then(qaResult => {
+            // Показываем краткий ответ только если уверенность строго больше 0.0%
+            if (qaResult && qaResult.score > 0.01) {
+                const exactAnswer = bestMatch.text.substring(qaResult.start, qaResult.end) || qaResult.answer;
+                const highlightUrl = `${bestRes.file}?highlight=${encodeURIComponent(exactAnswer)}`;
+                
+                shortAnswerContainer.innerHTML = `
+                    <strong style="color: var(--primary-color); display: block; margin-bottom: 5px;">Точный ответ (уверенность: ${(qaResult.score * 100).toFixed(1)}%):</strong>
+                    <span style="font-size: 15px; font-weight: 500;">${exactAnswer}</span>
+                    <br><a href="${highlightUrl}" style="font-size: 12px; color: var(--primary-color); text-decoration: underline; margin-top: 8px; display: inline-block;">Перейти к источнику (${bestRes.title})</a>
+                `;
+                shortAnswerContainer.style.display = 'block';
+            }
+        }).catch(err => console.error("QA Error:", err));
+    }
 };
 
 // Запуск

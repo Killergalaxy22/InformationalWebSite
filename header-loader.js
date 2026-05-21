@@ -143,7 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.text();
             })
             .then(html => {
-                placeholder.outerHTML = html; // Заменяем плейсхолдер чистым кодом
+                // Оптимизированная замена абсолютных ссылок на относительные перед вставкой в DOM
+                const processedHtml = html.replace(/href="\/index\.html"/g, 'href="index.html"');
+                placeholder.outerHTML = processedHtml; 
                 
                 // Инициализация часов после вставки шапки
                 if (comp.id === 'header-placeholder') {
@@ -163,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Глобальный обработчик категорий для всех страниц
     window.filterByCategory = (category) => {
         const path = window.location.pathname;
-        const isHomePage = path.endsWith('/') || path.endsWith('index.html') || !path.split('/').pop().includes('.');
+        const isHomePage = path.endsWith('/') || path.endsWith('index.html') || path === '' || path.split('/').pop() === '';
         
         if (isHomePage) {
             if (typeof window.localFilterByCategory === 'function') {

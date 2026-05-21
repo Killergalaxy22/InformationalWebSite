@@ -20,7 +20,7 @@ window.resources = [
         author: "Ильин В.А., Позняк Э.Г.",
         year: "2023",
         icon: "∫dx",
-        file: "Математический_анализ_Том_1.html"
+        file: "articles-math-analyze-tom-1.html"
     },
     {
         id: 3,
@@ -53,7 +53,7 @@ window.resources = [
         author: "MDN Community",
         year: "2024",
         icon: "🌐",
-        file: "html-css-guide.html"
+        file: "web-development.html"
     },
     {
         id: 6,

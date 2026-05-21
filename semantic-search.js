@@ -3,7 +3,10 @@ import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers
 
 // Разрешаем использование кэша браузера для хранения ONNX моделей
 env.allowLocalModels = false;
-env.useBrowserCache = true; 
+env.useBrowserCache = true;
+
+let semanticReadyResolve;
+const semanticReady = new Promise(resolve => { semanticReadyResolve = resolve; });
 
 const statusEl = document.getElementById('semantic-status');
 let extractor = null;
@@ -34,14 +37,12 @@ function chunkText(rawText) {
     return rawText
         .split(/\n+/)
         .map(doc => {
-            // 1. Удаляем любые HTML-теги (если они попали в текст как строки)
             let cleanDoc = doc.replace(/<\/?[^>]+(>|$)/g, '');
-            // 2. Удаляем маркеры списков в начале строки
             cleanDoc = cleanDoc.replace(/^\s*(\d+[\.\)]|[•\-\*\◦\▪])\s+/g, '');
-            // 3. Очищаем от лишних пробелов
             return cleanDoc.replace(/\s+/g, ' ').trim();
         })
-        .filter(doc => doc.length >= 10 && /\p{L}/u.test(doc));
+        // ИСПРАВЛЕНИЕ: Снижаем порог длины до 5 и разрешаем цифры (для формул и констант)
+        .filter(doc => doc.length >= 5 && /[\p{L}\d]/u.test(doc));
 }
 
 // Получение текста статьи (через fetch или fallback на описание)
@@ -55,11 +56,12 @@ async function fetchArticleText(resource) {
         const doc = parser.parseFromString(html, 'text/html');
         
         // Ищем по точному селектору, иначе берем body
-        let sourceElement = doc.querySelector('body > div.container > main > article') || doc.body;
+        let sourceElement = doc.querySelector('article') || doc.querySelector('.container main') || doc.body;
         
-        // Оптимизированный нативный парсинг: клонируем узел для безопасной работы с DOM
+        // Оптимизированный нативный парсинг
         const clone = sourceElement.cloneNode(true);
-        const blockTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section', 'article', 'aside', 'header', 'footer', 'figcaption', 'tr', 'ul', 'ol', 'dl', 'dt', 'dd'];
+        // ДОБАВЛЕНО: td, th, code, pre для корректного разделения научных данных
+        const blockTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section', 'article', 'tr', 'td', 'th', 'code', 'pre'];
         
         // Очищаем текст от скриптов, стилей и мусорных блоков
         clone.querySelectorAll('script, style, noscript, svg, .article-meta, .article-footer, .article-tags, .banner, aside, nav, footer').forEach(el => el.remove());
@@ -78,7 +80,167 @@ async function fetchArticleText(resource) {
     }
 }
 
+let lastAppliedHighlight = null;
+
+// Очистка старых выделений с восстановлением исходных текстовых узлов
+function clearPreviousHighlights() {
+    const highlights = document.querySelectorAll('.search-highlight');
+    highlights.forEach(mark => {
+        const parent = mark.parentNode;
+        if (parent && parent.contains(mark)) {
+            const textNode = document.createTextNode(mark.textContent);
+            parent.replaceChild(textNode, mark);
+            parent.normalize();
+        }
+    });
+}
+
+// Безопасная подсветка текста с автоматическим плавным исчезновением и очисткой DOM
+function highlightTextOnPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const highlightText = urlParams.get('highlight');
+    
+    // Предотвращаем повторный запуск для одного и того же URL (защита от бесконечного цикла MutationObserver)
+    const currentSearch = window.location.search;
+    if (currentSearch === lastAppliedHighlight) return;
+    lastAppliedHighlight = currentSearch;
+
+    // Сначала убираем предыдущие выделения
+    clearPreviousHighlights();
+
+    if (!highlightText) return;
+
+    // Добавляем оптимизированные стили плавной анимации выделения, если они отсутствуют
+    if (!document.getElementById('search-highlight-styles')) {
+        const style = document.createElement('style');
+        style.id = 'search-highlight-styles';
+        style.textContent = `
+            @keyframes search-highlight-pulse {
+                0% { background-color: rgba(255, 215, 0, 0.65); box-shadow: 0 0 6px rgba(255, 215, 0, 0.5); }
+                100% { background-color: rgba(255, 215, 0, 0.25); box-shadow: 0 0 2px rgba(255, 215, 0, 0.2); }
+            }
+            .search-highlight {
+                animation: search-highlight-pulse 1s ease-in-out infinite alternate;
+                border-radius: 3px;
+                padding: 1px 2px;
+                transition: background-color 0.8s ease, box-shadow 0.8s ease;
+            }
+            .search-highlight.fade-out {
+                animation: none !important;
+                background-color: transparent !important;
+                box-shadow: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    const cleanSearch = highlightText.trim().replace(/\s+/g, ' ');
+    if (cleanSearch.length < 3) return;
+
+    const container = document.querySelector('article') || document.querySelector('.container main') || document.body;
+    if (!container) return;
+
+    const textNodes = [];
+    const walk = document.createTreeWalker(
+        container,
+        NodeFilter.SHOW_TEXT,
+        {
+            acceptNode: (node) => {
+                const parent = node.parentElement;
+                if (!parent) return NodeFilter.FILTER_REJECT;
+                const tag = parent.tagName.toLowerCase();
+                if (['script', 'style', 'noscript', 'svg'].includes(tag)) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        }
+    );
+
+    let node;
+    while (node = walk.nextNode()) {
+        textNodes.push(node);
+    }
+
+    let combinedText = '';
+    const nodeRanges = [];
+    for (const n of textNodes) {
+        const start = combinedText.length;
+        combinedText += n.textContent;
+        nodeRanges.push({ node: n, start, end: combinedText.length });
+    }
+
+    const exactMatchIndex = combinedText.toLowerCase().indexOf(cleanSearch.toLowerCase());
+    if (exactMatchIndex === -1) return;
+
+    const matchEndIndex = exactMatchIndex + cleanSearch.length;
+    const nodesToHighlight = nodeRanges.filter(r => r.end > exactMatchIndex && r.start < matchEndIndex);
+
+    if (nodesToHighlight.length === 0) return;
+
+    const activeMarks = [];
+
+    const createMark = (rangeNode, start, end) => {
+        try {
+            const range = document.createRange();
+            range.setStart(rangeNode, start);
+            range.setEnd(rangeNode, end);
+            const mark = document.createElement('span');
+            mark.className = 'search-highlight';
+            range.surroundContents(mark);
+            activeMarks.push(mark);
+        } catch (e) {
+            console.warn('[Highlight] Ошибка создания диапазона:', e);
+        }
+    };
+
+    try {
+        const first = nodesToHighlight[0];
+        const last = nodesToHighlight[nodesToHighlight.length - 1];
+
+        const startOffset = Math.max(0, exactMatchIndex - first.start);
+        const endOffset = Math.min(last.node.textContent.length, matchEndIndex - last.start);
+
+        if (nodesToHighlight.length === 1) {
+            createMark(first.node, startOffset, endOffset);
+        } else {
+            // Если совпадение разбито по нескольким узлам, подсвечиваем каждый фрагмент индивидуально
+            nodesToHighlight.forEach((r, idx) => {
+                const nodeStart = idx === 0 ? startOffset : 0;
+                const nodeEnd = idx === nodesToHighlight.length - 1 ? endOffset : r.node.textContent.length;
+                createMark(r.node, nodeStart, nodeEnd);
+            });
+        }
+
+        if (activeMarks.length > 0) {
+            activeMarks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    } catch (e) {
+        console.error('[Highlight] Критическая ошибка при выделении:', e);
+    }
+
+    // Запускаем мягкое исчезновение за 800мс до удаления элементов из DOM
+    if (activeMarks.length > 0) {
+        setTimeout(() => {
+            activeMarks.forEach(m => m.classList.add('fade-out'));
+        }, 2200);
+
+        setTimeout(() => {
+            activeMarks.forEach(m => {
+                if (m.parentNode && m.parentNode.contains(m)) {
+                    const p = m.parentNode;
+                    p.replaceChild(document.createTextNode(m.textContent), m);
+                    p.normalize();
+                }
+            });
+        }, 3000);
+    }
+}
+
 async function initSemanticSearch() {
+    // Вызываем подсветку сразу, не дожидаясь загрузки нейросетей
+    highlightTextOnPage();
+
     await window.semanticDB.init();
     
     updateStatus('Загрузка нейросетей (WebGPU)...');
@@ -88,12 +250,28 @@ async function initSemanticSearch() {
 
     const resources = window.resources || [];
     
+    // ПРИОРИТЕТ: Перемещаем текущую статью в начало списка, чтобы она индексировалась первой
+    const currentPath = decodeURIComponent(window.location.pathname);
+    const currentFile = currentPath.split('/').pop().toLowerCase() || 'index.html';
+    console.log('[Semantic Search Init] Текущий путь:', currentPath, '| Файл:', currentFile);
+
+    resources.sort((a, b) => {
+        const aFile = decodeURIComponent(a.file).split('/').pop().toLowerCase();
+        const bFile = decodeURIComponent(b.file).split('/').pop().toLowerCase();
+        return (aFile === currentFile ? -1 : bFile === currentFile ? 1 : 0);
+    });
+    console.log('[Semantic Search Init] Порядок индексации ресурсов:', resources.map(r => r.file));
+    
     for (const res of resources) {
         const exists = await window.semanticDB.hasArticle(res.id);
+        console.log(`[Semantic Search Init] Статья "${res.title}" (ID: ${res.id}). Наличие в БД:`, exists);
         if (!exists) {
             updateStatus(`Индексирование: ${res.title.substring(0, 20)}...`);
+            console.log(`[Semantic Search Init] Загрузка текста для статьи ID ${res.id}...`);
             const text = await fetchArticleText(res);
+            console.log(`[Semantic Search Init] Длина полученного текста: ${text.length} символов.`);
             const chunks = chunkText(text);
+            console.log(`[Semantic Search Init] Разбивка завершена. Создано фрагментов: ${chunks.length}`);
             
             if (chunks.length > 0) {
                 const embeddings = [];
@@ -102,12 +280,18 @@ async function initSemanticSearch() {
                     embeddings.push(Array.from(output.data));
                 }
                 await window.semanticDB.saveChunks(res.id, chunks, embeddings);
+                console.log(`[Semantic Search Init] Фрагменты успешно сохранены в БД для статьи ID: ${res.id}`);
+            } else {
+                console.warn(`[Semantic Search Init] Предупреждение: для статьи ID: ${res.id} не найдено подходящих фрагментов для индексации.`);
             }
         }
     }
     
     updateStatus('Готово!', true);
     setTimeout(() => updateStatus('', false), 2000);
+    
+    // РАЗРЕШАЕМ ПОИСК
+    semanticReadyResolve();
 
     // Проверяем, был ли URL запрос при загрузке
     const q = window.getQueryParam();
@@ -120,20 +304,26 @@ async function initSemanticSearch() {
 
 // Переопределяем глобальную функцию поиска
 window.performSearch = async function(targetArticleId = null) {
+    // Ждем завершения инициализации и индексации текущей статьи
+    await semanticReady;
+
     const queryRaw = document.getElementById('searchInput').value;
     const query = queryRaw.trim();
     
     // Определяем контекст: главная или статья
     const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
     
-    // Если мы в статье и ID не передан, находим его по имени файла
-    if (!isHomePage && targetArticleId === null) {
-        const currentFile = window.location.pathname.split('/').pop();
-        const article = (window.resources || []).find(r => r.file === currentFile);
+    // ИСПРАВЛЕНИЕ: Если поиск локальный, а переданный ID некорректен (null, undefined или <= 0), определяем его по URL
+    if (!isHomePage && (targetArticleId === null || typeof targetArticleId !== 'number' || targetArticleId <= 0)) {
+        const currentPath = decodeURIComponent(window.location.pathname);
+        const currentFile = currentPath.split('/').pop().toLowerCase() || 'index.html';
+        const article = (window.resources || []).find(r => {
+            const rFile = decodeURIComponent(r.file).split('/').pop().toLowerCase();
+            return rFile === currentFile;
+        });
         if (article) {
             targetArticleId = article.id;
         } else {
-            // Если файл не найден в базе, ставим несуществующий ID, чтобы поиск не стал глобальным
             targetArticleId = -999; 
         }
     }
@@ -156,11 +346,15 @@ window.performSearch = async function(targetArticleId = null) {
     updateStatus('Семантический поиск...', true);
 
     // Векторизуем запрос
+    console.log('[Perform Search] Векторизация поискового запроса...');
     const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
     const queryEmbedding = Array.from(queryOutput.data);
+    console.log('[Perform Search] Запрос успешно векторизован.');
 
     // Получаем все эмбеддинги (или для конкретной статьи)
+    console.log('[Perform Search] Запрос эмбеддингов из БД для ID статьи:', targetArticleId);
     const allChunks = await window.semanticDB.getAllEmbeddings(targetArticleId);
+    console.log('[Perform Search] Извлечено фрагментов из БД:', allChunks.length);
     
     // Считаем сходство
     allChunks.forEach(chunk => {
@@ -172,6 +366,10 @@ window.performSearch = async function(targetArticleId = null) {
 
     // Берем топ 10 с score >= 0.3
     const topMatches = allChunks.filter(chunk => chunk.score >= 0.3).slice(0, 10);
+    console.log('[Perform Search] Количество результатов, прошедших порог (score >= 0.3):', topMatches.length);
+    if (topMatches.length > 0) {
+        console.log('[Perform Search] Наиболее релевантный фрагмент (score):', topMatches[0].score, 'Текст:', topMatches[0].text);
+    }
 
     const grid = document.getElementById('resourcesGrid');
     const countSpan = document.getElementById('count');

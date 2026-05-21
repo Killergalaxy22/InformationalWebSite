@@ -3,414 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Механика и кинематика - EduSearch</title>
+    
+    <title>Механика и кинематика | EduSearch</title>
     <meta name="description" content="Полное руководство по механике и кинематике. Законы Ньютона, движение тел, кинематические уравнения. Подготовка к экзаменам и лабораторным работам.">
     <meta name="keywords" content="механика, кинематика, физика, законы Ньютона, движение, ускорение, скорость, физика для студентов">
-    <meta name="author" content="Кафедра общей физики">
-    <meta property="og:title" content="Механика и кинематика - Полное руководство">
-    <meta property="og:description" content="Подробное изучение механики и кинематики с примерами и задачами">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/mechanics-and-kinematics">
+
+    <!-- Open Graph / Social Media -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://edusearch.vstu.ru/Механика_и_кинематика.html">
-    <meta property="og:image" content="https://edusearch.vstu.ru/images/mechanics-preview.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Механика и кинематика">
-    <meta name="twitter:description" content="Полное руководство по механике и кинематике">
-    <style>
-        :root {
-            --bg-color: #f4f6f8;
-            --header-bg: #e3f2fd;
-            --primary-color: #5c86ad;
-            --accent-color: #81c784;
-            --text-main: #37474f;
-            --text-secondary: #78909c;
-            --card-bg: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
+    <meta property="og:title" content="Механика и кинематика | EduSearch">
+    <meta property="og:description" content="Подробное изучение механики и кинематики с примерами и задачами для студентов.">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/mechanics-preview.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/mechanics-and-kinematics">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Механика и кинематика",
+      "author": {"@type": "Organization", "name": "Кафедра общей физики"},
+      "publisher": {"@type": "Organization", "name": "EduSearch"},
+      "datePublished": "2026-02-18",
+      "inLanguage": "ru"
+    }
+    </script>
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; padding: 0; margin: 0; }
-        button { font-family: inherit; }
-
-        header {
-            background-color: var(--header-bg);
-            padding: 15px 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo span { color: var(--text-main); }
-
-        .clock {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            background: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            color: var(--primary-color);
-            border: 1px solid #dcebf7;
-        }
-
-        .ticker-wrap {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            overflow: hidden;
-            height: 30px;
-            line-height: 30px;
-            font-size: 14px;
-        }
-
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            animation: ticker 20s linear infinite;
-            padding-left: 100%;
-        }
-
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-        }
-
-        aside .widget {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        aside h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        .categories li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f9f9f9;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .categories li:hover {
-            color: var(--primary-color);
-            padding-left: 5px;
-        }
-
-        .banner {
-            background-color: #fff3e0;
-            border: 1px dashed #ffb74d;
-            text-align: center;
-            padding: 15px;
-        }
-        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; }
-
-        .download-btn {
-            background: none;
-            border: 1px solid #333;
-            padding: 5px 15px;
-            cursor: pointer;
-            margin-top: 5px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        .download-btn:hover { background: #333; color: #fff; }
-
-        main {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .article-header {
-            border-bottom: 2px solid #e3f2fd;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .article-title {
-            font-size: 32px;
-            margin: 0 0 10px 0;
-            color: var(--text-main);
-        }
-
-        .article-meta {
-            display: flex;
-            gap: 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .article-content {
-            line-height: 1.8;
-            color: var(--text-main);
-        }
-
-        .article-content h2 {
-            color: var(--primary-color);
-            margin: 30px 0 15px 0;
-            font-size: 24px;
-        }
-
-        .article-content p {
-            margin: 15px 0;
-        }
-
-        .article-content ul, .article-content ol {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        .article-content li {
-            margin: 8px 0;
-        }
-
-        .article-content blockquote {
-            border-left: 4px solid var(--primary-color);
-            padding-left: 20px;
-            margin: 20px 0;
-            font-style: italic;
-            color: var(--text-secondary);
-        }
-
-        .article-footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #e3f2fd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .article-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background-color: var(--header-bg);
-            color: var(--primary-color);
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .download-section {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-
-        .download-section h3 {
-            margin: 0 0 15px 0;
-            color: var(--primary-color);
-        }
-
-        .download-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .download-btn {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            text-align: center;
-        }
-
-        .download-btn:hover {
-            background-color: #66bb6a;
-        }
-
-        footer {
-            background-color: #37474f;
-            color: #cfd8dc;
-            padding: 40px 0;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-            .article-footer { flex-direction: column; gap: 15px; }
-            .download-options { grid-template-columns: 1fr; }
-        }
-    </style>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
+    <link rel="stylesheet" href="article-style.css">
     <script src="header-loader.js" defer></script>
 </head>
 <body>
     <div id="header-placeholder"></div>
 
-
-    
-
-    
-    </div>
-
     <div class="container">
-                <aside><div id="categories-placeholder"></div><div id="banner-placeholder"></div></aside>
+        <aside>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
+        </aside>
 
         <main>
-            <div class="article-header">
-                <h1 class="article-title">Механика и кинематика</h1>
-                <div class="article-meta">
-                    <span>Автор: Кафедра общей физики</span>
-                    <span>Категория: Физика</span>
-                    <span>Дата: 18.02.2026</span>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Механика и кинематика</h1>
+                    <div class="article-meta">
+                        <span>Автор: Кафедра общей физики</span>
+                        <span>Категория: Физика</span>
+                        <span>Дата: 18.02.2026</span>
+                    </div>
+                </header>
+
+                <div class="article-content">
+                    <h2>Введение</h2>
+                    <p>Механика — это раздел физики, изучающий движение и взаимодействие тел. <em>Кинематика</em> — это раздел механики, описывающий движение тел без учета причин, его вызывающих. В этой статье мы рассмотрим основные понятия, законы и уравнения, необходимые для понимания механики и кинематики.</p>
+
+                    <h2>Основные понятия кинематики</h2>
+                    <p>Кинематика изучает движение тел в пространстве и времени. Ключевые термины:</p>
+                    <ul>
+                        <li><strong>Материальная точка</strong> — тело, размерами которого можно пренебречь по сравнению с расстояниями, на которых рассматривается его движение.</li>
+                        <li><strong>Система отсчета</strong> — совокупность тела отсчета, системы координат и часов для измерения времени.</li>
+                        <li><strong>Траектория</strong> — линия, вдоль которой движется материальная точка.</li>
+                        <li><strong>Путь</strong> — длина траектории, пройденная телом.</li>
+                        <li><strong>Перемещение</strong> — вектор, соединяющий начальное и конечное положения тела.</li>
+                    </ul>
+
+                    <h2>Кинематические величины</h2>
+                    <h3>Скорость</h3>
+                    <p>Скорость — векторная величина, характеризующая быстроту перемещения:</p>
+                    <blockquote>
+                        <strong>v = dr/dt</strong><br>
+                        где dr — элементарное перемещение, dt — элементарный промежуток времени.
+                    </blockquote>
+                    <p>Скорость можно разделить на:</p>
+                    <ul>
+                        <li><strong>Среднюю скорость:</strong> vₘ = Δr/Δt</li>
+                        <li><strong>Мгновенную скорость:</strong> v = lim(Δt→0) Δr/Δt</li>
+                    </ul>
+
+                    <h3>Ускорение</h3>
+                    <p>Ускорение — векторная величина, характеризующая быстроту изменения скорости:</p>
+                    <pre><code>a = dv/dt</code></pre>
+                    <p>Ускорение также имеет среднее и мгновенное значения:</p>
+                    <ul>
+                        <li><strong>Среднее ускорение:</strong> aₘ = Δv/Δt</li>
+                        <li><strong>Мгновенное ускорение:</strong> a = lim(Δt→0) Δv/Δt</li>
+                    </ul>
+
+                    <h2>Типы движения</h2>
+                    <h3>Поступательное движение</h3>
+                    <p>При поступательном движении все точки тела движутся одинаково. Различают:</p>
+                    <ol>
+                        <li><strong>Равномерное прямолинейное движение:</strong> скорость постоянна, a = 0.</li>
+                        <li><strong>Равнопеременное прямолинейное движение:</strong> ускорение постоянно.</li>
+                    </ol>
+
+                    <h3>Криволинейное движение</h3>
+                    <p>При криволинейном движении тело движется по кривой траектории. Основные типы:</p>
+                    <ul>
+                        <li>Равномерное движение по окружности.</li>
+                        <li>Нелинейное движение с переменной скоростью.</li>
+                    </ul>
+
+                    <h2>Кинематические уравнения</h2>
+                    <p>Ниже приведены основные формулы для расчетов:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Тип движения</th>
+                                <th>Уравнение</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Равномерное</td>
+                                <td>s = s₀ + vt</td>
+                            </tr>
+                            <tr>
+                                <td>Равнопеременное</td>
+                                <td>s = s₀ + v₀t + ½at²</td>
+                            </tr>
+                            <tr>
+                                <td>Скорость (равноперем.)</td>
+                                <td>v = v₀ + at</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Движение под действием силы тяжести</h2>
+                    <p>Свободное падение тела происходит с ускорением свободного падения <strong>g ≈ 9.81 м/с²</strong>. Кинематические уравнения для вертикального движения:</p>
+                    <ul>
+                        <li>h = h₀ + v₀t - ½gt²</li>
+                        <li>v = v₀ - gt</li>
+                        <li>v² = v₀² - 2g(h - h₀)</li>
+                    </ul>
+
+                    <h2>Примеры задач</h2>
+                    <p><strong>Пример 1:</strong> Тело движется равномерно со скоростью 20 м/с. Определите путь, пройденный телом за 5 с.<br>
+                    <em>Решение:</em> s = vt = 20 × 5 = 100 м.</p>
+
+                    <p><strong>Пример 2:</strong> Тело начинает движение из состояния покоя с ускорением 3 м/с². Найдите скорость через 4 с.<br>
+                    <em>Решение:</em> v = at = 3 × 4 = 12 м/с.</p>
+
+                    <h2>Заключение</h2>
+                    <p>Кинематика предоставляет фундаментальные инструменты для описания движения тел. Понимание основных понятий и уравнений необходимо для дальнейшего изучения динамики и других разделов физики.</p>
                 </div>
-            </div>
 
-            <div class="article-content">
-                <h2>Введение</h2>
-                <p>Механика - это раздел физики, изучающий движение и взаимодействие тел. Кинематика - это раздел механики, описывающий движение тел без учета причин, его вызывающих. В этой статье мы рассмотрим основные понятия, законы и уравнения, необходимые для понимания механики и кинематики.</p>
-
-                <h2>Основные понятия кинематики</h2>
-                <p>Кинематика изучает движение тел в пространстве и времени. Основные понятия:</p>
-                <ul>
-                    <li><strong>Материальная точка</strong> - тело, размерами которого можно пренебречь по сравнению с расстояниями, на которых рассматривается его движение.</li>
-                    <li><strong>Система отсчета</strong> - совокупность тела отсчета, системы координат и часов для измерения времени.</li>
-                    <li><strong>Траектория</strong> - линия, вдоль которой движется материальная точка.</li>
-                    <li><strong>Путь</strong> - длина траектории, пройденная телом.</li>
-                    <li><strong>Перемещение</strong> - вектор, соединяющий начальное и конечное положения тела.</li>
-                </ul>
-
-                <h2>Кинематические величины</h2>
-                <h3>Скорость</h3>
-                <p>Скорость - векторная величина, характеризующая быстроту перемещения:</p>
-                <p><strong>v = dr/dt</strong></p>
-                <p>где dr - элементарное перемещение, dt - элементарный промежуток времени.</p>
-                <p>Скорость можно разделить на:</p>
-                <ul>
-                    <li><strong>Среднюю скорость</strong>: <strong>vₘ = Δr/Δt</strong></li>
-                    <li><strong>Мгновенную скорость</strong>: <strong>v = lim(Δt→0) Δr/Δt</strong></li>
-                </ul>
-
-                <h3>Ускорение</h3>
-                <p>Ускорение - векторная величина, характеризующая быстроту изменения скорости:</p>
-                <p><strong>a = dv/dt</strong></p>
-                <p>Ускорение также имеет среднее и мгновенное значения:</p>
-                <ul>
-                    <li><strong>Среднее ускорение</strong>: <strong>aₘ = Δv/Δt</strong></li>
-                    <li><strong>Мгновенное ускорение</strong>: <strong>a = lim(Δt→0) Δv/Δt</strong></li>
-                </ul>
-
-                <h2>Типы движения</h2>
-                <h3>Поступательное движение</h3>
-                <p>При поступательном движении все точки тела движутся одинаково. Различают:</p>
-                <ul>
-                    <li><strong>Равномерное прямолинейное движение</strong>: скорость постоянна, <strong>a = 0</strong></li>
-                    <li><strong>Равнопеременное прямолинейное движение</strong>: ускорение постоянно</li>
-                </ul>
-
-                <h3>Криволинейное движение</h3>
-                <p>При криволинейном движении тело движется по кривой траектории. Основные типы:</p>
-                <ul>
-                    <li><strong>Равномерное движение по окружности</strong></li>
-                    <li><strong>Нелинейное движение с переменной скоростью</strong></li>
-                </ul>
-
-                <h2>Кинематические уравнения</h2>
-                <h3>Равномерное прямолинейное движение</h3>
-                <p><strong>s = s₀ + vt</strong></p>
-                <p>где s - путь, s₀ - начальное положение, v - скорость, t - время.</p>
-
-                <h3>Равнопеременное прямолинейное движение</h3>
-                <p><strong>s = s₀ + v₀t + ½at²</strong></p>
-                <p><strong>v = v₀ + at</strong></p>
-                <p><strong>v² = v₀² + 2a(s - s₀)</strong></p>
-
-                <h2>Движение под действием силы тяжести</h2>
-                <p>Свободное падение тела происходит с ускорением свободного падения <strong>g ≈ 9.81 м/с²</strong>.</p>
-                <p>Кинематические уравнения для вертикального движения:</p>
-                <p><strong>h = h₀ + v₀t - ½gt²</strong></p>
-                <p><strong>v = v₀ - gt</strong></p>
-                <p><strong>v² = v₀² - 2g(h - h₀)</strong></p>
-
-                <h2>Проекции движения на оси координат</h2>
-                <p>Для движения в трехмерном пространстве удобно использовать проекции на оси координат:</p>
-                <ul>
-                    <li><strong>Движение вдоль оси x</strong>: <strong>x = x₀ + vₓ₀t + ½aₓt²</strong></li>
-                    <li><strong>Движение вдоль оси y</strong>: <strong>y = y₀ + vу₀t + ½aуt²</strong></li>
-                    <li><strong>Движение вдоль оси z</strong>: <strong>z = z₀ + vz₀t + ½azt²</strong></li>
-                </ul>
-
-                <h2>Примеры задач</h2>
-                <h3>Пример 1: Равномерное движение</h3>
-                <p>Тело движется равномерно со скоростью 20 м/с. Определите путь, пройденный телом за 5 с.</p>
-                <p><strong>Решение:</strong> s = vt = 20 × 5 = 100 м</p>
-
-                <h3>Пример 2: Равнопеременное движение</h3>
-                <p>Тело начинает движение из состояния покоя с ускорением 3 м/с². Найдите скорость через 4 с и путь, пройденный за это время.</p>
-                <p><strong>Решение:</strong> v = at = 3 × 4 = 12 м/с; s = ½at² = ½ × 3 × 16 = 24 м</p>
-
-                <h2>Заключение</h2>
-                <p>Кинематика предоставляет фундаментальные инструменты для описания движения тел. Понимание основных понятий, типов движения и кинематических уравнений необходимо для изучения динамики и других разделов физики. Освоение этих концепций поможет в решении практических задач и подготовке к экзаменам.</p>
-            </div>
-
-            <div class="article-footer">
-                <div class="article-tags">
-                    <span class="tag">Физика</span>
-                    <span class="tag">Механика</span>
-                    <span class="tag">Кинематика</span>
-                    <span class="tag">Законы Ньютона</span>
-                </div>
-                <span>Просмотров: 234</span>
-            </div>
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">Физика</span>
+                        <span class="tag">Механика</span>
+                        <span class="tag">Кинематика</span>
+                        <span class="tag">Законы Ньютона</span>
+                    </div>
+                    <div class="views-count">
+                        Просмотров: 234
+                    </div>
+                </footer>
+            </article>
         </main>
     </div>
 
-        <div id="footer-placeholder"></div>
-
-    
+    <div id="footer-placeholder"></div>
 </body>
 </html>

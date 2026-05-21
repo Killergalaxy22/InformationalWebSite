@@ -4,240 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Оптимизация -->
     <title>Полный гайд по Python 2025: От основ до функций | EduSearch</title>
     <meta name="description" content="Изучите Python с нуля: переменные, списки, словари, функции и обработка ошибок. Практическое руководство для студентов и начинающих разработчиков.">
     <meta name="keywords" content="Python для начинающих, основы Python, списки Python, функции Python, изучение программирования, уроки Python 2025">
-    <meta name="author" content="EduSearch - Учебный портал ВГТУ">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://edusearch.vgtu.ru/python-basics.html">
 
-    <!-- Open Graph для соцсетей -->
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
     <meta property="og:title" content="Основы Python: Полное руководство для новичков">
     <meta property="og:description" content="Пошаговое руководство по изучению Python. Разбираем всё: от переменных до функций и модулей.">
-    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/default-cover.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/python-basics.html">
 
-    <style>
-        :root {
-            --bg-color: #f4f6f8;
-            --header-bg: #e3f2fd;
-            --primary-color: #5c86ad;
-            --accent-color: #81c784;
-            --text-main: #37474f;
-            --text-secondary: #78909c;
-            --card-bg: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
-            --code-bg: #1e1e1e;
-            --code-text: #d4d4d4;
-        }
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Основы Python для начинающих: Полное руководство",
+      "author": {"@type": "Organization", "name": "EduSearch Team"},
+      "publisher": {"@type": "Organization", "name": "EduSearch"},
+      "datePublished": "2025-01-01",
+      "inLanguage": "ru"
+    }
+    </script>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        a { text-decoration: none; color: var(--primary-color); transition: 0.3s; }
-        ul { list-style: none; padding: 0; margin: 0; }
-
-        header {
-            background-color: var(--header-bg);
-            padding: 15px 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clock {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            background: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            color: var(--primary-color);
-            border: 1px solid #dcebf7;
-        }
-
-        .ticker-wrap {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            overflow: hidden;
-            height: 30px;
-            line-height: 30px;
-            font-size: 14px;
-        }
-
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            animation: ticker 25s linear infinite;
-            padding-left: 100%;
-        }
-
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-        }
-
-        aside .widget {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        aside h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        .categories li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f9f9f9;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .categories li:hover { color: var(--primary-color); padding-left: 5px; }
-
-        .banner {
-            background-color: #fff3e0;
-            border: 1px dashed #ffb74d;
-            text-align: center;
-            padding: 15px;
-        }
-        .banner strong { display: block; font-size: 18px; margin-bottom: 5px; color: #000000; }
-        .banner p { font-size: 14px; margin-bottom: 10px; }
-        
-        .download-btn {
-            background: none;
-            border: 1px solid #333;
-            padding: 5px 15px;
-            cursor: pointer;
-            margin-top: 5px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        .download-btn:hover { background: #333; color: #fff; }
-
-        main {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .article-header {
-            border-bottom: 2px solid #e3f2fd;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .article-title { font-size: 32px; margin: 0; color: var(--text-main); }
-
-        .article-content h2 {
-            color: var(--primary-color);
-            margin: 35px 0 15px 0;
-            font-size: 24px;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-        }
-
-        pre {
-            background-color: var(--code-bg);
-            color: var(--code-text);
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Consolas', monospace;
-            font-size: 14px;
-            margin: 20px 0;
-            border: 1px solid #333;
-        }
-
-        .tag {
-            background-color: var(--header-bg);
-            color: var(--primary-color);
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        footer {
-            background-color: #37474f;
-            color: #cfd8dc;
-            padding: 40px 0;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-        }
-    </style>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
+    <link rel="stylesheet" href="article-style.css">
     <script src="header-loader.js" defer></script>
 </head>
 <body>
     <div id="header-placeholder"></div>
 
-
-    
-
-    
-    </div>
-
     <div class="container">
-                <aside><div id="categories-placeholder"></div><div id="banner-placeholder"></div></aside>
+        <aside>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
+        </aside>
 
         <main>
             <article>
-                <div class="article-header">
+                <header class="article-header">
                     <h1 class="article-title">Основы Python для начинающих: Полное руководство</h1>
                     <div class="article-meta">
                         <span>Автор: EduSearch Team</span>
                         <span>Категория: Программирование</span>
                         <span>Дата: 01.01.2025</span>
                     </div>
-                </div>
+                </header>
 
                 <div class="article-content">
-                    <h2>Введение</h2>
                     <p>Python — это высокоуровневый язык программирования, который отличается простотой и читаемостью кода. Благодаря лаконичному синтаксису, он идеально подходит для первого языка программирования, позволяя сосредоточиться на логике, а не на сложных конструкциях.</p>
 
                     <h2>1. Первая программа</h2>
@@ -295,22 +114,21 @@ print(f"Случайное число: {number}")</code></pre>
                     <p>Python открывает двери в мир Data Science, Web-разработки, искусственного интеллекта и автоматизации. Главный совет для начинающих — больше практики. Пишите код каждый день, и результат не заставит себя ждать!</p>
                 </div>
 
-                <div class="article-footer">
+                <footer class="article-footer">
                     <div class="article-tags">
                         <span class="tag">Python</span>
                         <span class="tag">Программирование</span>
                         <span class="tag">Backend</span>
                         <span class="tag">Обучение</span>
                     </div>
-                    <br>
-                    <span>Просмотров: 5,612</span>
-                </div>
+                    <div class="views-count">
+                        Просмотров: 5,612
+                    </div>
+                </footer>
             </article>
         </main>
     </div>
 
-        <div id="footer-placeholder"></div>
-
-    
+    <div id="footer-placeholder"></div>
 </body>
 </html>

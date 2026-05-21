@@ -20,6 +20,38 @@ body {
     line-height: 1.6;
 }
 
+a { text-decoration: none; color: inherit; transition: color 0.2s; }
+a:hover { color: var(--primary-color); }
+
+ul { list-style: none; padding: 0; margin: 0; }
+
+/* Global Site Header */
+header {
+    background-color: var(--header-bg);
+    padding: 15px 0;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo { font-size: 24px; font-weight: bold; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
+.clock { font-family: 'Courier New', monospace; font-weight: bold; background: #fff; padding: 5px 15px; border-radius: 20px; color: var(--primary-color); border: 1px solid #dcebf7; }
+
+/* Бегущая строка */
+.ticker-wrap { width: 100%; background-color: var(--primary-color); color: white; overflow: hidden; height: 30px; line-height: 30px; font-size: 14px; }
+.ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; padding-left: 100%; }
+@keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -38,6 +70,9 @@ main {
 
 /* Header Section */
 .article-header {
+    position: static;
+    background: transparent;
+    box-shadow: none;
     border-bottom: var(--border-line);
     padding-bottom: 20px;
     margin-bottom: 30px;
@@ -73,6 +108,7 @@ main {
 .article-content ul, .article-content ol {
     margin: 20px 0;
     padding-left: 25px;
+    list-style-type: disc;
 }
 
 /* Code Block */
@@ -115,6 +151,8 @@ blockquote {
 
 /* Footer Section */
 .article-footer {
+    background: transparent;
+    box-shadow: none;
     border-top: var(--border-line);
     margin-top: 40px;
     padding-top: 20px;
@@ -147,7 +185,98 @@ aside .widget {
     margin-bottom: 20px;
 }
 
+aside h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* Sidebar Widgets */
+.categories ul { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.categories li {
+    width: 100%;
+    list-style-type: none;
+    padding: 8px 0;
+    margin-left: 0;
+    border-bottom: 1px solid #f9f9f9;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+}
+.categories li:hover { color: var(--primary-color); padding-left: 8px; }
+.categories a { 
+    display: block; 
+    width: 100%;
+    color: inherit; 
+    text-align: left;
+    transition: color 0.2s;
+}
+
+/* Баннер Курсовая на 5? */
+.banner {
+    background-color: #fff3e0;
+    border: 1px dashed #ffb74d;
+    text-align: center;
+    padding: 15px;
+}
+.banner strong { display: block; font-size: 18px; margin-bottom: 5px; color: #000000; }
+.banner p { font-size: 14px; margin-bottom: 10px; }
+
+.download-btn {
+    background: none;
+    border: 1px solid #333;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: all 0.3s;
+    display: inline-block;
+    border-radius: 0;
+    font-weight: normal;
+}
+.download-btn:hover { background: #333; color: #fff; }
+
+/* Global Footer */
+footer {
+    background-color: #37474f;
+    color: #cfd8dc;
+    padding: 40px 0;
+    margin-top: 50px;
+    text-align: center;
+}
+footer a { color: #81c784; }
+
 @media (max-width: 768px) {
-    .container { grid-template-columns: 1fr; }
-    .article-footer { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .header-container { flex-direction: column; gap: 10px; }
+    .ticker-wrap { display: none; }
+}
+
+/* Плавная анимация появления и исчезновения желтого выделения */
+@keyframes search-highlight-fade {
+    0% {
+        background-color: rgba(227, 242, 253, 0);
+    }
+    10% {
+        background-color: rgba(227, 242, 253, 0.75);
+    }
+    80% {
+        background-color: rgba(227, 242, 253, 0.75);
+    }
+    100% {
+        background-color: rgba(227, 242, 253, 0);
+    }
+}
+
+.search-highlight {
+    animation: search-highlight-fade 3s ease-in-out forwards;
+    border-radius: 3px;
+    padding: 0 2px;
+    display: inline;
 }

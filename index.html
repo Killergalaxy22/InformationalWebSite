@@ -201,6 +201,31 @@
 
         .search-btn:hover { background-color: #4a6d8f; }
 
+        /* --- ПОИСКОВЫЕ РЕЗУЛЬТАТЫ (СТРОКИ) --- */
+        .search-result-row {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .search-result-content { flex-grow: 1; }
+        .search-result-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        .search-result-title:hover { text-decoration: underline; }
+        .search-result-match { font-size: 14px; color: var(--text-main); }
+        .search-result-score { font-weight: bold; color: var(--text-secondary); white-space: nowrap; }
+
         /* --- 5. ОСНОВНОЙ КОНТЕНТ --- */
         .container {
             max-width: 1200px;
@@ -468,6 +493,7 @@
             <input type="text" class="search-input" id="searchInput" placeholder="Например: Математический анализ..." name="q">
             <button class="search-btn" onclick="performSearch()" aria-label="Найти материалы">Найти</button>
         </div>
+        <div id="short-answer-container" style="display: none; max-width: 600px; margin: 20px auto 0; background: #fff; padding: 15px; border-radius: 8px; box-shadow: var(--shadow); text-align: left; border-left: 4px solid var(--accent-color);"></div>
     </section>
 
     <!-- КОНТЕНТ -->
@@ -540,7 +566,7 @@
     <script type="module" src="semantic-search.js"></script>
     <script>
         // --- 1. БАЗА ДАННЫХ ---
-        const resources = [
+        window.resources = [
             {
                 id: 1,
                 title: "Основы Python для начинающих",
@@ -657,42 +683,56 @@
 
         // --- 2. ФУНКЦИИ ---
 
-        // Рендеринг карточек с микроразметкой Schema.org (LearningResource)
-        function renderResources(data) {
+        // Рендеринг карточек: режим сетки (isSearch=false) или горизонтальный список (isSearch=true)
+        window.renderResources = function(data, isSearch = false) {
             const grid = document.getElementById('resourcesGrid');
             const countSpan = document.getElementById('count');
+            if (!grid || !countSpan) return;
 
+            const items = data || [];
             grid.innerHTML = '';
-            countSpan.textContent = data.length;
+            countSpan.textContent = items.length;
 
-            if (data.length === 0) {
+            // Переключаем режим отображения контейнера
+            grid.style.display = isSearch ? 'block' : 'grid';
+
+            if (items.length === 0) {
                 grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Ничего не найдено :(</p>';
                 return;
             }
 
-            data.forEach(item => {
-                // Используем тег article для семантики
+            items.forEach(item => {
                 const card = document.createElement('article');
-                card.className = 'resource-card';
-                // Добавляем микроразметку
-                card.setAttribute('itemscope', '');
-                card.setAttribute('itemtype', 'https://schema.org/LearningResource');
-                card.setAttribute('itemprop', 'itemListElement');
-
-                card.innerHTML = `
-                    <div class="card-img" aria-hidden="true">${item.icon}</div>
-                    <div class="card-body">
-                        <div class="card-tag" itemprop="educationalLevel">${item.category}</div>
-                        <h3 class="card-title" itemprop="name">${item.title}</h3>
-                        <meta itemprop="author" content="${item.author}">
-                        <meta itemprop="datePublished" content="${item.year}">
-                        <p class="card-desc" itemprop="description">${item.desc}</p>
-                        ${item.file ? 
-                            `<a href="${item.file}" class="card-btn" itemprop="url">Подробнее</a>` : 
-                            `<button class="card-btn" onclick="openResourceModal(${item.id})" aria-label="Подробнее о ${item.title}">Подробнее</button>`
-                        }
-                    </div>
-                `;
+                
+                if (isSearch) {
+                    // Горизонтальная карточка для поиска
+                    card.className = 'search-result-row';
+                    card.innerHTML = `
+                        <div class="search-result-content">
+                            <a href="${item.file || '#'}" class="search-result-title" onclick="${!item.file ? `openResourceModal(${item.id}); return false;` : ''}">${item.icon} ${item.title}</a>
+                            <div class="search-result-match">${item.desc}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">Категория: ${item.category} | Автор: ${item.author}</div>
+                        </div>
+                        <div class="search-result-score">${item.year}</div>
+                    `;
+                } else {
+                    // Вертикальная карточка для статей/категорий
+                    card.className = 'resource-card';
+                    card.setAttribute('itemscope', '');
+                    card.setAttribute('itemtype', 'https://schema.org/LearningResource');
+                    card.innerHTML = `
+                        <div class="card-img" aria-hidden="true">${item.icon}</div>
+                        <div class="card-body">
+                            <div class="card-tag" itemprop="educationalLevel">${item.category}</div>
+                            <h3 class="card-title" itemprop="name">${item.title}</h3>
+                            <p class="card-desc" itemprop="description">${item.desc}</p>
+                            ${item.file ? 
+                                `<a href="${item.file}" class="card-btn" itemprop="url">Подробнее</a>` : 
+                                `<button class="card-btn" onclick="openResourceModal(${item.id})">Подробнее</button>`
+                            }
+                        </div>
+                    `;
+                }
                 grid.appendChild(card);
             });
         }
@@ -756,16 +796,29 @@
             }
         }
 
-        function filterByCategory(category) {
+        window.localFilterByCategory = function(category) {
+            if (searchInputEl) searchInputEl.value = '';
+            const shortAnswer = document.getElementById('short-answer-container');
+            if (shortAnswer) {
+                shortAnswer.style.display = 'none';
+                shortAnswer.innerHTML = '';
+            }
+            
+            // Обновляем URL без перезагрузки, чтобы сохранить состояние
+            const url = new URL(window.location.href);
+            url.searchParams.set('category', category);
+            url.searchParams.delete('q');
+            history.replaceState(null, '', url.toString());
+
             if (category === 'Все') {
-                renderResources(resources);
+                renderResources(resources, false);
                 document.getElementById('resultsTitle').textContent = "Все материалы";
             } else {
                 const filtered = resources.filter(item => item.category === category);
-                renderResources(filtered);
+                renderResources(filtered, false);
                 document.getElementById('resultsTitle').textContent = `Категория: ${category}`;
             }
-        }
+        };
 
         const searchInputEl = document.getElementById('searchInput');
 
@@ -795,12 +848,17 @@
 
         // Инициализация
         window.onload = function() {
-            renderResources(resources);
+            renderResources(resources, false);
             renderNews();
 
-            const q = getQueryParam();
-            if (q) {
-                searchInputEl.value = q;
+            const urlParams = new URLSearchParams(window.location.search);
+            const catParam = urlParams.get('category');
+            const qParam = urlParams.get('q');
+
+            if (catParam) {
+                window.localFilterByCategory(catParam);
+            } else if (qParam) {
+                searchInputEl.value = qParam;
                 performSearch();
             }
         };

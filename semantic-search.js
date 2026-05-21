@@ -120,8 +120,10 @@ window.performSearch = async function(targetArticleId = null) {
     window.setQueryParam(queryRaw);
 
     if (!query) {
-        window.renderResources(window.resources);
+        window.renderResources(window.resources || []);
         document.getElementById('resultsTitle').textContent = "Все материалы";
+        const shortAnswerContainer = document.getElementById('short-answer-container');
+        if (shortAnswerContainer) shortAnswerContainer.style.display = 'none';
         return;
     }
 
@@ -147,28 +149,58 @@ window.performSearch = async function(targetArticleId = null) {
     // Сортируем по релевантности
     allChunks.sort((a, b) => b.score - a.score);
 
-    // Группируем лучшие совпадения по статьям (порог отсечения 0.3)
-    const bestMatches = new Map();
-    for (const chunk of allChunks) {
-        if (chunk.score < 0.3) continue; 
-        if (!bestMatches.has(chunk.articleId)) {
-            bestMatches.set(chunk.articleId, chunk);
-        }
+    // Берем топ 10 с score >= 0.3
+    const topMatches = allChunks.filter(chunk => chunk.score >= 0.3).slice(0, 10);
+
+    const grid = document.getElementById('resourcesGrid');
+    const countSpan = document.getElementById('count');
+    const shortAnswerContainer = document.getElementById('short-answer-container');
+
+    grid.innerHTML = '';
+    grid.style.display = 'block'; // Переключаем сетку на блочное отображение (в строку)
+    countSpan.textContent = topMatches.length;
+
+    if (topMatches.length === 0) {
+        grid.innerHTML = '<p style="text-align: center;">Ничего не найдено :(</p>';
+        shortAnswerContainer.style.display = 'none';
+        updateStatus('', false);
+        return;
     }
 
-    // Формируем результаты, подменяя описание на найденный контекст
-    const results = [];
-    bestMatches.forEach((chunk, articleId) => {
-        const originalRes = window.resources.find(r => r.id === articleId);
-        if (originalRes) {
-            // Создаем копию, чтобы не портить оригинал, и вставляем найденный кусок текста
-            const resCopy = { ...originalRes };
-            resCopy.desc = `...${chunk.text}... <br><small style="color:var(--primary-color)">Точность: ${(chunk.score * 100).toFixed(1)}%</small>`;
-            results.push(resCopy);
-        }
+    // Краткий ответ
+    const bestMatch = topMatches[0];
+    const bestRes = window.resources.find(r => r.id === bestMatch.articleId);
+    if (bestMatch.score > 0.0 && bestRes) {
+        const highlightUrl = `${bestRes.file}?highlight=${encodeURIComponent(bestMatch.text)}`;
+        shortAnswerContainer.innerHTML = `
+            <strong style="color: var(--primary-color); display: block; margin-bottom: 5px;">Краткий ответ (уверенность: ${(bestMatch.score * 100).toFixed(1)}%):</strong>
+            <span style="font-size: 14px;">${bestMatch.text}</span>
+            <br><a href="${highlightUrl}" style="font-size: 12px; color: var(--primary-color); text-decoration: underline; margin-top: 8px; display: inline-block;">Перейти к источнику (${bestRes.title})</a>
+        `;
+        shortAnswerContainer.style.display = 'block';
+    } else {
+        shortAnswerContainer.style.display = 'none';
+    }
+
+    // Рендер результатов в виде строк
+    topMatches.forEach(chunk => {
+        const originalRes = window.resources.find(r => r.id === chunk.articleId);
+        if (!originalRes) return;
+
+        const highlightUrl = `${originalRes.file}?highlight=${encodeURIComponent(chunk.text)}`;
+        
+        const row = document.createElement('div');
+        row.className = 'search-result-row';
+        row.innerHTML = `
+            <div class="search-result-content">
+                <a href="${highlightUrl}" class="search-result-title">${originalRes.title}</a>
+                <div class="search-result-match">...${chunk.text}...</div>
+            </div>
+            <div class="search-result-score">[${(chunk.score * 100).toFixed(1)}%]</div>
+        `;
+        grid.appendChild(row);
     });
 
-    window.renderResources(results);
     document.getElementById('resultsTitle').textContent = `Нейропоиск: "${query}"`;
     updateStatus('', false);
 };

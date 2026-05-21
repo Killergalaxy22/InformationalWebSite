@@ -532,7 +532,12 @@
 
     <div id="footer-placeholder"></div>
 
+    <!-- СТАТУС СЕМАНТИЧЕСКОГО ПОИСКА -->
+    <div id="semantic-status" style="display: none; position: fixed; bottom: 20px; right: 20px; background: var(--primary-color); color: white; padding: 12px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999; font-size: 14px; font-weight: bold; transition: opacity 0.3s;"></div>
+
     <!-- СКРИПТЫ -->
+    <script src="semantic-db.js"></script>
+    <script type="module" src="semantic-search.js"></script>
     <script>
         // --- 1. БАЗА ДАННЫХ ---
         const resources = [
@@ -751,18 +756,6 @@
             }
         }
 
-        // Поиск
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = resources.filter(item =>
-                item.title.toLowerCase().includes(query) ||
-                item.category.toLowerCase().includes(query) ||
-                item.desc.toLowerCase().includes(query)
-            );
-            renderResources(filtered);
-            document.getElementById('resultsTitle').textContent = query ? `Результаты поиска: "${query}"` : "Все материалы";
-        }
-
         function filterByCategory(category) {
             if (category === 'Все') {
                 renderResources(resources);
@@ -776,8 +769,6 @@
 
         const searchInputEl = document.getElementById('searchInput');
 
-        let searchLock = false;
-
         function setQueryParam(q) {
             const url = new URL(window.location.href);
             if (q && q.trim()) url.searchParams.set('q', q.trim());
@@ -790,31 +781,15 @@
             return url.searchParams.get('q') || '';
         }
 
-        function performSearch() {
-            if (searchLock) return;
-            searchLock = true;
-            setTimeout(() => (searchLock = false), 150);
-
-            const queryRaw = searchInputEl.value || '';
-            const query = queryRaw.toLowerCase().trim();
-
-            setQueryParam(queryRaw);
-
-            const filtered = resources.filter(item =>
-                item.title.toLowerCase().includes(query) ||
-                item.category.toLowerCase().includes(query) ||
-                item.desc.toLowerCase().includes(query)
-            );
-
-            renderResources(filtered);
-            document.getElementById('resultsTitle').textContent =
-                query ? `Результаты поиска: "${queryRaw.trim()}"` : "Все материалы";
-        }
+        // Глобальная функция поиска (будет переопределена в semantic-search.js)
+        window.performSearch = function() {
+            console.log("Семантический поиск еще загружается...");
+        };
 
         searchInputEl.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                performSearch();
+                window.performSearch();
             }
         });
 

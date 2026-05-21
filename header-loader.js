@@ -108,8 +108,11 @@ document.addEventListener('click', (e) => {
     if (!link) return;
 
     const url = new URL(link.href, window.location.origin);
-    // Если путь совпадает с текущим и есть параметр highlight
-    if (url.pathname === window.location.pathname && url.searchParams.has('highlight')) {
+    // Сравниваем только поисковые параметры, если пути ведут на один и тот же файл
+    const isSamePage = url.pathname === window.location.pathname || 
+                       (url.pathname.replace('index.html', '') === window.location.pathname.replace('index.html', ''));
+
+    if (isSamePage && url.searchParams.has('highlight')) {
         e.preventDefault();
         const highlightText = url.searchParams.get('highlight');
         
@@ -159,16 +162,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Глобальный обработчик категорий для всех страниц
     window.filterByCategory = (category) => {
         const path = window.location.pathname;
-        const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '';
+        const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path.endsWith('InformationalWebSite');
         
         if (isHomePage) {
-            // Если мы на главной, вызываем локальную функцию (она будет определена в index.html)
+            // Если мы на главной, вызываем локальную функцию
             if (typeof window.localFilterByCategory === 'function') {
                 window.localFilterByCategory(category);
             }
         } else {
-            // Если мы в статье, уходим на главную с параметром категории
-            window.location.href = `/?category=${encodeURIComponent(category)}`;
+            // Если мы в статье, уходим на главную с параметром категории (относительный путь)
+            window.location.href = `index.html?category=${encodeURIComponent(category)}`;
         }
     };
 
@@ -180,8 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- ЛОКАЛЬНЫЙ ПОИСК ДЛЯ СТАТЕЙ ---
     const path = window.location.pathname;
-    const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '';
-    
+    // Проверка учитывает корень, index.html и имя репозитория без слеша в конце
+    const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path.split('/').pop() === 'InformationalWebSite';
+
     if (!isHomePage) {
         const container = document.querySelector('.container');
         if (container) {

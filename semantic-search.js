@@ -1,9 +1,14 @@
 // semantic-search.js
-import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+// ИСПРАВЛЕНИЕ: Переходим на Transformers.js v3 для поддержки dtype и WebGPU
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0';
 
 // Разрешаем использование кэша браузера для хранения ONNX моделей
 env.allowLocalModels = false;
 env.useBrowserCache = true;
+
+// ИСПРАВЛЕНИЕ: Жестко ограничиваем WASM одним потоком. 
+// По умолчанию ONNX создает до 4 потоков, дублируя память. Это снизит RAM с ~430 МБ до ~200 МБ.
+env.backends.onnx.wasm.numThreads = 1;
 
 let semanticReadyResolve;
 const semanticReady = new Promise(resolve => { semanticReadyResolve = resolve; });
@@ -85,9 +90,15 @@ async function initSemanticSearch() {
     
     updateStatus('Загрузка нейросетей (Оптимизация памяти)...');
     // Загрузка и автоматическое кэширование моделей в Cache Storage браузера
-    // Убран WebGPU (крашит мобильные браузеры) и включено квантование (снижает ОЗУ в 4 раза)
-    extractor = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', { quantized: true });
-    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { quantized: true });
+    // В v3 используем dtype: 'q8' (INT8). В будущем можно заменить на 'q4' (4-bit), если веса появятся на сервере.
+    extractor = await pipeline('feature-extraction', 'Xenova/multilingual-e5-small', { 
+        dtype: 'q8',
+        device: 'wasm' // Опционально: можно сменить на 'webgpu', чтобы перенести нагрузку из RAM в видеопамять
+    });
+    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { 
+        dtype: 'q8',
+        device: 'wasm'
+    });
 
     const resources = window.resources || [];
     
@@ -117,7 +128,7 @@ async function initSemanticSearch() {
             if (chunks.length > 0) {
                 const embeddings = [];
                 for (const chunk of chunks) {
-                    const output = await extractor(chunk, { pooling: 'mean', normalize: true });
+                    const output = await extractor(`passage: ${chunk}`, { pooling: 'mean', normalize: true });
                     embeddings.push(Array.from(output.data));
                     // Микро-пауза для очистки памяти сборщиком мусора и разблокировки UI
                     await new Promise(resolve => setTimeout(resolve, 5));
@@ -190,7 +201,7 @@ window.performSearch = async function(targetArticleId = null) {
 
     // Векторизуем запрос
     console.log('[Perform Search] Векторизация поискового запроса...');
-    const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
+    const queryOutput = await extractor(`query: ${query}`, { pooling: 'mean', normalize: true });
     const queryEmbedding = Array.from(queryOutput.data);
     console.log('[Perform Search] Запрос успешно векторизован.');
 

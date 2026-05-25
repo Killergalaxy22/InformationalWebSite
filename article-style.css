@@ -288,3 +288,30 @@ footer a { color: #81c784; }
     padding: 0;
     display: inline;
 }
+
+/* --- ПОИСКОВЫЕ РЕЗУЛЬТАТЫ (СТРОКИ) --- */
+.search-result-row {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.search-result-content { flex-grow: 1; }
+.search-result-title {
+    font-size: 18px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+.search-result-title:hover {
+    text-decoration: underline;
+}
+.search-result-match { font-size: 14px; color: var(--text-main); }
+.search-result-score { font-weight: bold; color: var(--text-secondary); white-space: nowrap; }

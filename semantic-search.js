@@ -37,6 +37,59 @@ function cosineSimilarity(vecA, vecB) {
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
+// ДОБАВЛЕНО: Быстрый токенизатор и оптимизированный алгоритм BM25
+function tokenize(text) {
+    return text.toLowerCase().match(/\p{L}+|\d+/gu) || [];
+}
+
+function calculateBM25(queryTerms, chunks) {
+    const N = chunks.length;
+    let totalLength = 0;
+    const chunkTokens = new Array(N);
+    const df = {};
+
+    // Предварительная обработка чанков
+    for (let i = 0; i < N; i++) {
+        const tokens = tokenize(chunks[i].text);
+        chunkTokens[i] = tokens;
+        totalLength += tokens.length;
+        
+        const uniqueTokens = new Set(tokens);
+        for (const term of queryTerms) {
+            if (uniqueTokens.has(term)) df[term] = (df[term] || 0) + 1;
+        }
+    }
+
+    const avgdl = totalLength / (N || 1);
+    const k1 = 1.2, b = 0.75;
+    const idf = {};
+    
+    // Расчет IDF
+    for (const term of queryTerms) {
+        const n = df[term] || 0;
+        idf[term] = Math.log(1 + (N - n + 0.5) / (n + 0.5));
+    }
+
+    // Расчет скоров с использованием Float32Array для максимальной производительности
+    const scores = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+        const tokens = chunkTokens[i];
+        const docLen = tokens.length;
+        const tf = {};
+        for (let j = 0; j < docLen; j++) tf[tokens[j]] = (tf[tokens[j]] || 0) + 1;
+
+        let score = 0;
+        for (const term of queryTerms) {
+            if (tf[term]) {
+                const f = tf[term];
+                score += idf[term] * (f * (k1 + 1)) / (f + k1 * (1 - b + b * (docLen / avgdl)));
+            }
+        }
+        scores[i] = score;
+    }
+    return scores;
+}
+
 // Очистка и разбиение текста на предложения/абзацы
 function chunkText(rawText) {
     return rawText
@@ -252,9 +305,31 @@ window.performSearch = async function(targetArticleId = null) {
     const allChunks = await window.semanticDB.getAllEmbeddings(targetArticleId);
     console.log('[Perform Search] Извлечено фрагментов из БД:', allChunks.length);
     
-    // Считаем сходство
+    // ДОБАВЛЕНО: Гибридный поиск (Векторный + BM25) с нормализацией
+    const queryTerms = tokenize(query);
+    const bm25Scores = calculateBM25(queryTerms, allChunks);
+    
+    let maxVec = 0, minVec = Infinity;
+    let maxBM25 = 0, minBM25 = Infinity;
+
+    // Считаем сырые скоры и находим экстремумы для нормализации
+    allChunks.forEach((chunk, i) => {
+        chunk.vecScore = cosineSimilarity(queryEmbedding, chunk.vector);
+        chunk.bm25Score = bm25Scores[i];
+        
+        if (chunk.vecScore > maxVec) maxVec = chunk.vecScore;
+        if (chunk.vecScore < minVec) minVec = chunk.vecScore;
+        if (chunk.bm25Score > maxBM25) maxBM25 = chunk.bm25Score;
+        if (chunk.bm25Score < minBM25) minBM25 = chunk.bm25Score;
+    });
+
+    // Нормализация Min-Max и взвешенная сумма (Альфа = 0.6 для вектора, 0.4 для BM25)
+    const alpha = 0.6;
     allChunks.forEach(chunk => {
-        chunk.score = cosineSimilarity(queryEmbedding, chunk.vector);
+        const normVec = maxVec > minVec ? (chunk.vecScore - minVec) / (maxVec - minVec) : 0;
+        const normBM25 = maxBM25 > minBM25 ? (chunk.bm25Score - minBM25) / (maxBM25 - minBM25) : 0;
+        // Итоговый гибридный скор
+        chunk.score = (normVec * alpha) + (normBM25 * (1 - alpha));
     });
 
     // Сортируем по релевантности

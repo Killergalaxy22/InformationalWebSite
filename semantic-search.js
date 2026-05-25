@@ -83,10 +83,11 @@ async function fetchArticleText(resource) {
 async function initSemanticSearch() {
     await window.semanticDB.init();
     
-    updateStatus('Загрузка нейросетей (WebGPU)...');
+    updateStatus('Загрузка нейросетей (Оптимизация памяти)...');
     // Загрузка и автоматическое кэширование моделей в Cache Storage браузера
-    extractor = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', { device: 'webgpu' });
-    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { device: 'webgpu' });
+    // Убран WebGPU (крашит мобильные браузеры) и включено квантование (снижает ОЗУ в 4 раза)
+    extractor = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', { quantized: true });
+    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { quantized: true });
 
     const resources = window.resources || [];
     
@@ -118,6 +119,8 @@ async function initSemanticSearch() {
                 for (const chunk of chunks) {
                     const output = await extractor(chunk, { pooling: 'mean', normalize: true });
                     embeddings.push(Array.from(output.data));
+                    // Микро-пауза для очистки памяти сборщиком мусора и разблокировки UI
+                    await new Promise(resolve => setTimeout(resolve, 5));
                 }
                 await window.semanticDB.saveChunks(res.id, chunks, embeddings);
                 console.log(`[Semantic Search Init] Фрагменты успешно сохранены в БД для статьи ID: ${res.id}`);

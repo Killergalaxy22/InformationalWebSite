@@ -138,6 +138,23 @@ async function fetchArticleText(resource) {
     }
 }
 
+// ДОБАВЛЕНО: Функция для загрузки QA-модели
+async function loadQaPipeline() {
+    updateStatus('Загрузка QA-нейросети...', true);
+    try {
+        qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { 
+            dtype: 'q8',
+            device: 'wasm'
+        });
+        updateStatus('QA-нейросеть готова!', true);
+        setTimeout(() => updateStatus('', false), 2000);
+    } catch (e) {
+        console.error("QA Error:", e);
+        updateStatus('Ошибка загрузки QA', true);
+        setTimeout(() => updateStatus('', false), 2000);
+    }
+}
+
 // ДОБАВЛЕНО: Функция показа окна с предложением скачать QA-модель
 function showQaPrompt() {
     const prompt = document.createElement('div');
@@ -150,7 +167,7 @@ function showQaPrompt() {
     `;
     prompt.innerHTML = `
         <p style="margin: 0 0 10px 0; font-size: 14px; color: #333; line-height: 1.4;">
-            <strong>Точные ответы:</strong> Скачать дополнительную нейросеть для выделения краткого ответа из текста? (Весит ~100МБ, может замедлить устройство).
+            <strong>Точные ответы:</strong> Скачать дополнительную нейросеть для выделения краткого ответа из текста? (Весит ~300МБ, может замедлить устройство).
         </p>
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
             <button id="qa-skip-btn" style="padding: 8px 12px; border: none; background: #eee; color: #333; border-radius: 5px; cursor: pointer; font-size: 13px;">Закрыть</button>
@@ -165,19 +182,8 @@ function showQaPrompt() {
 
     document.getElementById('qa-download-btn').onclick = async () => {
         prompt.remove();
-        updateStatus('Загрузка QA-нейросети...', true);
-        try {
-            qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { 
-                dtype: 'q8',
-                device: 'wasm'
-            });
-            updateStatus('QA-нейросеть готова!', true);
-            setTimeout(() => updateStatus('', false), 2000);
-        } catch (e) {
-            console.error("QA Error:", e);
-            updateStatus('Ошибка загрузки QA', true);
-            setTimeout(() => updateStatus('', false), 2000);
-        }
+        localStorage.setItem('qa_model_enabled', 'true');
+        await loadQaPipeline();
     };
 }
 
@@ -192,8 +198,12 @@ async function initSemanticSearch() {
         device: 'wasm' // Опционально: можно сменить на 'webgpu', чтобы перенести нагрузку из RAM в видеопамять
     });
 
-    // ИСПРАВЛЕНИЕ: Показываем окно при каждой загрузке страницы
-    showQaPrompt();
+    // ИСПРАВЛЕНИЕ: Автоматически загружаем QA из кэша, если она уже была установлена ранее, иначе показываем окно
+    if (localStorage.getItem('qa_model_enabled') === 'true') {
+        loadQaPipeline();
+    } else {
+        showQaPrompt();
+    }
 
     const resources = window.resources || [];
     
@@ -305,30 +315,49 @@ window.performSearch = async function(targetArticleId = null) {
     const allChunks = await window.semanticDB.getAllEmbeddings(targetArticleId);
     console.log('[Perform Search] Извлечено фрагментов из БД:', allChunks.length);
     
-    // ДОБАВЛЕНО: Гибридный поиск (Векторный + BM25) с нормализацией
+    // ИСПРАВЛЕНИЕ: Выделяем токены и проверяем их наличие
     const queryTerms = tokenize(query);
+    const grid = document.getElementById('resourcesGrid');
+    const countSpan = document.getElementById('count');
+    const shortAnswerContainer = document.getElementById('short-answer-container');
+
+    if (queryTerms.length === 0) {
+        grid.innerHTML = '<p style="text-align: center;">Ничего не найдено :(</p>';
+        countSpan.textContent = '0';
+        if (shortAnswerContainer) shortAnswerContainer.style.display = 'none';
+        updateStatus('', false);
+        return;
+    }
+
     const bm25Scores = calculateBM25(queryTerms, allChunks);
     
-    let maxVec = 0, minVec = Infinity;
-    let maxBM25 = 0, minBM25 = Infinity;
+    let maxBM25 = 0;
 
-    // Считаем сырые скоры и находим экстремумы для нормализации
+    // Считаем сырые скоры
     allChunks.forEach((chunk, i) => {
         chunk.vecScore = cosineSimilarity(queryEmbedding, chunk.vector);
         chunk.bm25Score = bm25Scores[i];
-        
-        if (chunk.vecScore > maxVec) maxVec = chunk.vecScore;
-        if (chunk.vecScore < minVec) minVec = chunk.vecScore;
         if (chunk.bm25Score > maxBM25) maxBM25 = chunk.bm25Score;
-        if (chunk.bm25Score < minBM25) minBM25 = chunk.bm25Score;
     });
 
-    // Нормализация Min-Max и взвешенная сумма (Альфа = 0.6 для вектора, 0.4 для BM25)
-    const alpha = 0.6;
+    // ИСПРАВЛЕНИЕ: Абсолютная калибровка векторной схожести вместо относительной нормализации.
+    // Если косинусное сходство ниже 0.72 — это шум. Выше 0.86 — максимальная уверенность.
+    const minSimilarity = 0.72;
+    const targetSimilarity = 0.86;
+    const alpha = 0.6; // Вес нейросети
+
     allChunks.forEach(chunk => {
-        const normVec = maxVec > minVec ? (chunk.vecScore - minVec) / (maxVec - minVec) : 0;
-        const normBM25 = maxBM25 > minBM25 ? (chunk.bm25Score - minBM25) / (maxBM25 - minBM25) : 0;
-        // Итоговый гибридный скор
+        let normVec = 0;
+        if (chunk.vecScore >= targetSimilarity) {
+            normVec = 1.0;
+        } else if (chunk.vecScore > minSimilarity) {
+            normVec = (chunk.vecScore - minSimilarity) / (targetSimilarity - minSimilarity);
+        }
+
+        // Относительная нормализация только для безграничной шкалы BM25
+        const normBM25 = maxBM25 > 0 ? chunk.bm25Score / maxBM25 : 0;
+        
+        // Результирующий скор
         chunk.score = (normVec * alpha) + (normBM25 * (1 - alpha));
     });
 
@@ -336,15 +365,11 @@ window.performSearch = async function(targetArticleId = null) {
     allChunks.sort((a, b) => b.score - a.score);
 
     // Берем топ 10 с score >= 0.3
-    const topMatches = allChunks.filter(chunk => chunk.score >= 0.3).slice(0, 10);
+    const topMatches = allChunks.filter(chunk => chunk.score >= 0.6).slice(0, 10);
     console.log('[Perform Search] Количество результатов, прошедших порог (score >= 0.3):', topMatches.length);
     if (topMatches.length > 0) {
         console.log('[Perform Search] Наиболее релевантный фрагмент (score):', topMatches[0].score, 'Текст:', topMatches[0].text);
     }
-
-    const grid = document.getElementById('resourcesGrid');
-    const countSpan = document.getElementById('count');
-    const shortAnswerContainer = document.getElementById('short-answer-container');
 
     grid.innerHTML = '';
     grid.style.display = 'block';
@@ -386,7 +411,8 @@ window.performSearch = async function(targetArticleId = null) {
     const bestMatch = topMatches[0];
     const bestRes = window.resources.find(r => r.id === bestMatch.articleId);
 
-    if (bestMatch.score > 0.01 && bestRes && qaPipeline) {
+    // ИСПРАВЛЕНИЕ: Дополнительно проверяем, что абсолютный векторный скор лучшего совпадения выше порога шума
+    if (bestMatch && bestMatch.vecScore > 0.75 && bestRes && qaPipeline) {
         qaPipeline(query, bestMatch.text).then(qaResult => {
             // Показываем краткий ответ только если уверенность строго больше 0.0%
             if (qaResult && qaResult.score > 0.01) {

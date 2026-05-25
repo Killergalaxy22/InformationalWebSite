@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Основы любительской астрономии | EduSearch</title>
+    <meta name="description" content="Введение в любительскую астрономию. Выбор первого телескопа, ориентация на звездном небе, объекты для наблюдения. Читать на EduSearch.">
+    <meta name="keywords" content="телескоп, рефрактор, рефлектор, созвездия, луна, астрономия, EduSearch">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/amateur-astronomy.html">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Основы любительской астрономии | EduSearch">
+    <meta property="og:description" content="Как сделать первые шаги в изучении космоса. Разбор типов телескопов, влияние светового загрязнения и правила ориентации по звездам.">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/default-cover.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/amateur-astronomy.html">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Основы любительской астрономии",
+      "author": {"@type": "Person", "name": "Дмитрий Семенов"},
+      "publisher": {"@type": "Organization", "name": "EduSearch"},
+      "datePublished": "2025-01-22",
+      "inLanguage": "ru"
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔭</text></svg>">
+    <link rel="stylesheet" href="article-style.css">
+    <script src="header-loader.js" defer></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+        <aside>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
+        </aside>
+
+        <main>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Основы любительской астрономии</h1>
+                    <div class="article-meta">
+                        <span>Автор: Дмитрий Семенов</span>
+                        <span>Категория: </span>
+                        <span>Дата: 22.01.2025</span>
+                    </div>
+                </header>
+
+                <div class="article-content">
+                    <p>Наблюдение за ночным небом — увлекательное хобби, которое связывает нас со вселенной. Современные любители имеют доступ к мощной оптике и цифровым картам неба, которые еще полвека назад были доступны лишь профессиональным обсерваториям.</p>
+
+                    <h2>С чего начать наблюдения?</h2>
+                    <p>Самая частая ошибка новичков — немедленная покупка дорогого сложного телескопа. Прежде чем переходить к инструментальным наблюдениям, рекомендуется:</p>
+                    <ul>
+                        <li>Выучить основные созвездия невооруженным глазом с помощью карт или приложений (Stellarium, Star Walk).</li>
+                        <li>Начать с хорошего астрономического бинокля (например, 7х50 или 10х50). Он дает широкое поле зрения и идеален для ознакомления с Луной и яркими звездными скоплениями.</li>
+                        <li>Выбрать место с минимальным уровнем световой засветки (шкала Бортля, 1–3 класс предпочтительно).</li>
+                    </ul>
+
+                    <blockquote>
+                        Апертура (диаметр объектива или главного зеркала) — ключевая характеристика любого телескопа. Именно она определяет, сколько света соберет прибор и насколько тусклые объекты вы сможете разглядеть. Увеличение вторично и зависит от окуляра.
+                    </blockquote>
+
+                    <h2>Формула полезного увеличения телескопа</h2>
+<pre><code># Максимальное полезное увеличение телескопа рассчитывается по формуле:
+# Magnification_max = 2 * Aperture_mm
+
+def get_max_useful_magnification(aperture_mm):
+    return aperture_mm * 2
+
+aperture = 114  # Популярный размер зеркала начального уровня
+print(f"Максимальное полезное увеличение: {get_max_useful_magnification(aperture)} крат")</code></pre>
+
+                    <h2>Сравнение оптических схем телескопов</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Тип оптической схемы</th>
+                                <th>Преимущества</th>
+                                <th>Недостатки</th>
+                                <th>Что лучше наблюдать</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Рефрактор (линзовый)</strong></td>
+                                <td>Не требует настройки юстировки, быстро термостабилизируется, дает контрастное изображение.</td>
+                                <td>Наличие хроматической аберрации (радужные ореолы), высокая стоимость крупных диаметров.</td>
+                                <td>Луна, двойные звезды, планеты Солнечной системы.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Рефлектор Ньютона (зеркальный)</strong></td>
+                                <td>Минимум аберраций, лучшая цена за миллиметр апертуры.</td>
+                                <td>Чувствителен к пыли, требует периодической юстировки (настройки зеркал).</td>
+                                <td>Галактики, туманности, звездные скопления (Deep Sky).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Зеркально-линзовый (Катадиоптрик)</strong></td>
+                                <td>Компактные размеры, большое фокусное расстояние в коротком корпусе.</td>
+                                <td>Долгая термостабилизация (выравнивание температур воздуха и оптики).</td>
+                                <td>Планетная съемка, наземные объекты, универсальный инструмент.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Алгоритм первой наблюдательной сессии</h2>
+                    <ol>
+                        <li>Проверить прогноз погоды и индекс астрономической видимости (прозрачность атмосферы, «сиинг»).</li>
+                        <li>Выставить телескоп на улицу минимум за 30–40 минут до начала наблюдений для выравнивания температур (термостабилизация).</li>
+                        <li>Настроить соосность искателя и основного телескопа по яркому удаленному наземному объекту или Луне.</li>
+                        <li>Начинать поиск объектов с окуляра, дающего наименьшее увеличение (с наибольшим фокусным расстоянием, например, 25 мм), для более простого наведения.</li>
+                    </ol>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">Астрономия</span>
+                        <span class="tag">Телескопы</span>
+                        <span class="tag">Космос</span>
+                    </div>
+                    <div class="views-count">
+                        Просмотров: 843
+                    </div>
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <div id="footer-placeholder"></div>
+</body>
+</html>

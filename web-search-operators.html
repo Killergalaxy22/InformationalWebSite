@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Эффективный веб-поиск: Операторы и стратегии | EduSearch</title>
+    <meta name="description" content="Учебное пособие по расширенному поиску информации в веб-пространстве. Описание операторов Google, Яндекс и методологий поиска информации.">
+    <meta name="keywords" content="веб-поиск, поисковые операторы, Google dorking, информационный поиск, EduSearch">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/web-search-operators.html">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Эффективный веб-поиск: Операторы и стратегии | EduSearch">
+    <meta property="og:description" content="Использование сложных операторов поиска, фильтрация нежелательного трафика и методы верификации найденных источников информации.">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/default-cover.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/web-search-operators.html">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Эффективный веб-поиск: Операторы и стратегии",
+      "author": {"@type": "Person", "name": "Игорь Кузнецов"},
+      "publisher": {"@type": "Organization", "name": "EduSearch"},
+      "datePublished": "2025-01-18",
+      "inLanguage": "ru"
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+    <link rel="stylesheet" href="article-style.css">
+    <script src="header-loader.js" defer></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+        <aside>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
+        </aside>
+
+        <main>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Эффективный веб-поиск: Операторы и стратегии</h1>
+                    <div class="article-meta">
+                        <span>Автор: Игорь Кузнецов</span>
+                        <span>Категория: </span>
+                        <span>Дата: 18.01.2025</span>
+                    </div>
+                </header>
+
+                <div class="article-content">
+                    <p>Современные поисковые системы индексируют миллиарды страниц. Поиск нужной информации по простым ключевым словам часто выливается в анализ нерелевантной выдачи. Использование специализированных поисковых операторов (синтаксиса запросов) кратно сокращает время поиска.</p>
+
+                    <h2>Что такое поисковые операторы?</h2>
+                    <p>Поисковые операторы — это служебные символы или ключевые слова, добавляемые к поисковому запросу, чтобы сузить фокус выдачи поисковых роботов до строго определенных параметров.</p>
+
+                    <blockquote>
+                        С помощью операторов можно искать документы конкретных форматов (например, PDF), ограничить результаты определенным сайтом или исключить ненужные слова из выдачи.
+                    </blockquote>
+
+                    <h2>Примеры расширенных поисковых запросов</h2>
+<pre><code># Найти книги по Python в формате PDF на сайтах образовательных учреждений (.edu):
+site:.edu filetype:pdf "python programming"
+
+# Исключить из поиска информацию о продаже (минус-слова):
+книга по матанализу -купить -цена -магазин</code></pre>
+
+                    <h2>Основные операторы веб-поиска</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Оператор</th>
+                                <th>Назначение</th>
+                                <th>Пример использования</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>"текст"</code></td>
+                                <td>Точное совпадение фразы в указанном порядке.</td>
+                                <td><code>"теория струн"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>site:</code></td>
+                                <td>Ограничение поиска конкретным доменом или ресурсом.</td>
+                                <td><code>site:wikipedia.org квантовая физика</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>filetype:</code></td>
+                                <td>Поиск документов определенного расширения (PDF, DOCX, PPTX).</td>
+                                <td><code>filetype:pdf "лабораторная работа"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>-</code> (минус)</td>
+                                <td>Исключение страниц, содержащих указанное за знаком слово.</td>
+                                <td><code>ягуар авто -животное</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>intitle:</code></td>
+                                <td>Поиск страниц, содержащих ключевое слово строго в заголовке &lt;title&gt;.</td>
+                                <td><code>intitle:инструкция "router"</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Рекомендации по верификации веб-источников</h2>
+                    <ol>
+                        <li>Проверяйте доменную зону: образовательные (<code>.edu</code>) и государственные (<code>.gov</code>) сайты обычно содержат более надежные сведения, нежели коммерческие блоги.</li>
+                        <li>Оценивайте дату публикации материала, особенно в динамично развивающихся отраслях (ИТ, медицина, законодательство).</li>
+                        <li>Сопоставляйте информацию минимум в трех независимых источниках, чтобы исключить предвзятость или банальные опечатки.</li>
+                    </ol>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">Веб-поиск</span>
+                        <span class="tag">Информационная грамотность</span>
+                        <span class="tag">Поисковые системы</span>
+                    </div>
+                    <div class="views-count">
+                        Просмотров: 2,041
+                    </div>
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <div id="footer-placeholder"></div>
+</body>
+</html>

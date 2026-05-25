@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Искусство экспозиции в фотографии: Выдержка, диафрагма и ISO | EduSearch</title>
+    <meta name="description" content="Учебное руководство по ручным настройкам камеры. Описание выдержки, диафрагмы и чувствительности ISO. Читать на EduSearch.">
+    <meta name="keywords" content="экспозиция, диафрагма, выдержка, ISO, ГРИП, фотография, EduSearch">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://edusearch.vgtu.ru/photography-exposure.html">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Искусство экспозиции в фотографии: Выдержка, диафрагма и ISO | EduSearch">
+    <meta property="og:description" content="Физика экспозиционного треугольника. Разбор влияния параметров на художественную составляющую кадра: глубину резкости, размытие движения и цифровой шум.">
+    <meta property="og:image" content="https://edusearch.vgtu.ru/images/default-cover.jpg">
+    <meta property="og:url" content="https://edusearch.vgtu.ru/photography-exposure.html">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Искусство экспозиции в фотографии: Выдержка, диафрагма и ISO",
+      "author": {"@type": "Person", "name": "Роман Морозов"},
+      "publisher": {"@type": "Organization", "name": "EduSearch"},
+      "datePublished": "2025-01-26",
+      "inLanguage": "ru"
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📷</text></svg>">
+    <link rel="stylesheet" href="article-style.css">
+    <script src="header-loader.js" defer></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+        <aside>
+            <div id="categories-placeholder"></div>
+            <div id="banner-placeholder"></div>
+        </aside>
+
+        <main>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Искусство экспозиции в фотографии: Выдержка, диафрагма и ISO</h1>
+                    <div class="article-meta">
+                        <span>Автор: Роман Морозов</span>
+                        <span>Категория: </span>
+                        <span>Дата: 26.01.2025</span>
+                    </div>
+                </header>
+
+                <div class="article-content">
+                    <p>Экспозиция — это количество света, попадающее на светочувствительный элемент камеры (матрицу или пленку) за время съемки. Получение технически качественного снимка требует сбалансированной работы трех физических переменных, образующих экспозиционный треугольник.</p>
+
+                    <h2>Три столпа экспозиции</h2>
+                    <p>Изменение любого из этих параметров влияет не только на яркость кадра, но и несет художественный эффект:</p>
+                    <ul>
+                        <li><strong>Диафрагма (f-number):</strong> Регулирует размер отверстия в объективе. Меньшие значения (например, f/1.8) открывают диафрагму сильнее, пропуская больше света и сильнее размывая задний план (малая глубина резкости, ГРИП).</li>
+                        <li><strong>Выдержка:</strong> Время, в течение которого затвор камеры открыт для экспонирования матрицы. Короткие выдержки (1/1000 с) «замораживают» движение; длинные (1/2 с или длиннее) — смазывают динамику.</li>
+                        <li><strong>Чувствительность ISO:</strong> Искусственное усиление сигнала, получаемого от сенсора. Повышение ISO позволяет снимать в темноте, но привносит в кадр нежелательный цифровой шум (зернистость).</li>
+                    </ul>
+
+                    <blockquote>
+                        Правило взаимности: при изменении одного параметра экспозиции на одну ступень (стоп) в сторону уменьшения света, необходимо скорректировать любой другой параметр на одну ступень в сторону увеличения для сохранения прежней яркости снимка.
+                    </blockquote>
+
+                    <h2>Пример математики экспозиционных ступеней</h2>
+<pre><code># Шкала диафрагменных чисел строится по геометрической прогрессии со знаменателем sqrt(2):
+# f/1.0, f/1.4, f/2.0, f/2.8, f/4.0, f/5.6, f/8.0 ...
+# Каждое следующее значение уменьшает количество проходящего света ровно в 2 раза.
+
+import math
+steps = [1.0 * (math.sqrt(2) ** i) for i in range(7)]
+print("Стандартные ступени диафрагмы:")
+for val in steps:
+    print(f"f/{val:.1f}")</code></pre>
+
+                    <h2>Художественное влияние параметров</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Параметр</th>
+                                <th>Малое значение</th>
+                                <th>Большое значение</th>
+                                <th>Главный побочный эффект</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Диафрагма</td>
+                                <td>f/1.4 (Открытая)</td>
+                                <td>f/16 (Закрытая)</td>
+                                <td>Управление глубиной резкости изображаемого пространства (ГРИП).</td>
+                            </tr>
+                            <tr>
+                                <td>Выдержка</td>
+                                <td>1/4000 с (Короткая)</td>
+                                <td>30 с (Длинная)</td>
+                                <td>Контроль передачи динамики движения (замораживание или смазывание).</td>
+                            </tr>
+                            <tr>
+                                <td>Чувствительность ISO</td>
+                                <td>100 (Низкая)</td>
+                                <td>6400 (Высокая)</td>
+                                <td>Появление цифрового цветного шума и снижение динамического диапазона.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Пошаговая настройка камеры в ручном режиме (М)</h2>
+                    <ol>
+                        <li>Определить творческую задачу: нужно ли размыть фон (выбираем открытую диафрагму) или остановить быстрое движение (выбираем короткую выдержку).</li>
+                        <li>Установить желаемое значение для приоритетного параметра.</li>
+                        <li>Установить минимально возможное значение ISO (обычно 100) для минимизации шума.</li>
+                        <li>Скорректировать оставшийся параметр (выдержку или диафрагму), ориентируясь по шкале экспонометра в видоискателе или по гистограмме на дисплее.</li>
+                    </ol>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">Фотография</span>
+                        <span class="tag">Оптика</span>
+                        <span class="tag">Экспозиция</span>
+                    </div>
+                    <div class="views-count">
+                        Просмотров: 1,674
+                    </div>
+                </footer>
+            </article>
+        </main>
+    </div>
+
+    <div id="footer-placeholder"></div>
+</body>
+</html>

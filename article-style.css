@@ -256,6 +256,14 @@ footer a { color: #81c784; }
 @media (max-width: 768px) {
     .header-container { flex-direction: column; gap: 10px; }
     .ticker-wrap { display: none; }
+    .container { display: flex; flex-direction: column; padding: 15px; gap: 20px; box-sizing: border-box; }
+    aside { order: 2; }
+    main { padding: 20px; min-width: 0; box-sizing: border-box; }
+    .article-title { font-size: 24px; }
+    .article-meta { flex-wrap: wrap; gap: 10px; }
+    table { display: block; overflow-x: auto; }
+    .article-footer { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .article-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 }
 
 /* Плавная анимация появления и исчезновения желтого выделения */
@@ -277,6 +285,6 @@ footer a { color: #81c784; }
 .search-highlight {
     animation: search-highlight-fade 3s ease-in-out forwards;
     border-radius: 3px;
-    padding: 0 2px;
+    padding: 0;
     display: inline;
 }

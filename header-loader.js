@@ -79,7 +79,7 @@ window.applyHighlight = (targetText) => {
     const clean = (t) => t.replace(/<\/?[^>]+(>|$)/g, '').replace(/^\s*(\d+[\.\)]|[•\-\*\◦\▪])\s+/g, '').replace(/\s+/g, ' ').trim();
     const target = clean(targetText);
     const container = document.querySelector('article') || document.body;
-    const elements = Array.from(container.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, blockquote, div, td'));
+    const elements = Array.from(container.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, blockquote, div, td, pre, code'));
     
     let bestMatch = null;
     for (const el of elements) {
@@ -90,15 +90,61 @@ window.applyHighlight = (targetText) => {
     }
 
     if (bestMatch) {
-        bestMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        bestMatch.style.transition = 'background-color 0.6s ease, color 0.6s ease';
-        bestMatch.style.backgroundColor = '#78909c';
-        bestMatch.style.color = '#fff';
-        bestMatch.style.borderRadius = '4px';
+        const originalHTML = bestMatch.innerHTML;
+        
+        // Находим границы совпадения в текстовом содержимом
+        const escaped = target.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&').replace(/\s+/g, '\\s+');
+        const match = bestMatch.textContent.match(new RegExp(escaped, 'i'));
+        
+        if (match) {
+            const rawStart = match.index;
+            const rawEnd = rawStart + match[0].length;
+            
+            // Находим все текстовые узлы, попадающие в этот диапазон
+            const walker = document.createTreeWalker(bestMatch, NodeFilter.SHOW_TEXT, null, false);
+            const nodesToProcess = [];
+            let charCount = 0;
+            let node;
+            
+            while (node = walker.nextNode()) {
+                const nodeLength = node.nodeValue.length;
+                const nodeStart = charCount;
+                const nodeEnd = charCount + nodeLength;
+                
+                if (nodeEnd > rawStart && nodeStart < rawEnd) {
+                    nodesToProcess.push({
+                        node,
+                        start: Math.max(rawStart, nodeStart) - nodeStart,
+                        end: Math.min(rawEnd, nodeEnd) - nodeStart
+                    });
+                }
+                charCount = nodeEnd;
+            }
+            
+            // Оборачиваем найденные участки текстовых узлов с конца к началу
+            for (let i = nodesToProcess.length - 1; i >= 0; i--) {
+                const { node, start, end } = nodesToProcess[i];
+                const mid = node.splitText(start);
+                mid.splitText(end - start);
+                
+                const span = document.createElement('span');
+                span.className = 'search-highlight';
+                mid.parentNode.insertBefore(span, mid);
+                span.appendChild(mid);
+            }
+            
+            // Скроллим к первому выделенному фрагменту
+            const highlightSpan = bestMatch.querySelector('.search-highlight');
+            if (highlightSpan) {
+                highlightSpan.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+            }
+        } else {
+            bestMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
         setTimeout(() => {
-            bestMatch.style.backgroundColor = '';
-            bestMatch.style.color = '';
-        }, 2500);
+            bestMatch.innerHTML = originalHTML;
+        }, 3000);
     }
 };
 

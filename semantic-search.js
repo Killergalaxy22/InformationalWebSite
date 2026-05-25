@@ -85,20 +85,62 @@ async function fetchArticleText(resource) {
     }
 }
 
+// ДОБАВЛЕНО: Функция показа окна с предложением скачать QA-модель
+function showQaPrompt() {
+    const prompt = document.createElement('div');
+    prompt.id = 'qa-prompt';
+    // Стили адаптированы под мобильные устройства и позиционируются над semantic-status
+    prompt.style.cssText = `
+        position: fixed; bottom: 75px; right: 20px; width: calc(100% - 40px); max-width: 350px;
+        background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000; font-family: sans-serif; border-left: 4px solid var(--primary-color, #5c86ad);
+    `;
+    prompt.innerHTML = `
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #333; line-height: 1.4;">
+            <strong>Точные ответы:</strong> Скачать дополнительную нейросеть для выделения краткого ответа из текста? (Весит ~100МБ, может замедлить устройство).
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="qa-skip-btn" style="padding: 8px 12px; border: none; background: #eee; color: #333; border-radius: 5px; cursor: pointer; font-size: 13px;">Закрыть</button>
+            <button id="qa-download-btn" style="padding: 8px 12px; border: none; background: var(--primary-color, #5c86ad); color: white; border-radius: 5px; cursor: pointer; font-size: 13px;">Скачать</button>
+        </div>
+    `;
+    document.body.appendChild(prompt);
+
+    document.getElementById('qa-skip-btn').onclick = () => {
+        prompt.remove();
+    };
+
+    document.getElementById('qa-download-btn').onclick = async () => {
+        prompt.remove();
+        updateStatus('Загрузка QA-нейросети...', true);
+        try {
+            qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { 
+                dtype: 'q8',
+                device: 'wasm'
+            });
+            updateStatus('QA-нейросеть готова!', true);
+            setTimeout(() => updateStatus('', false), 2000);
+        } catch (e) {
+            console.error("QA Error:", e);
+            updateStatus('Ошибка загрузки QA', true);
+            setTimeout(() => updateStatus('', false), 2000);
+        }
+    };
+}
+
 async function initSemanticSearch() {
     await window.semanticDB.init();
     
-    updateStatus('Загрузка нейросетей (Оптимизация памяти)...');
+    updateStatus('Загрузка основной нейросети поиска...');
     // Загрузка и автоматическое кэширование моделей в Cache Storage браузера
     // В v3 используем dtype: 'q8' (INT8). В будущем можно заменить на 'q4' (4-bit), если веса появятся на сервере.
     extractor = await pipeline('feature-extraction', 'Xenova/multilingual-e5-small', { 
         dtype: 'q8',
         device: 'wasm' // Опционально: можно сменить на 'webgpu', чтобы перенести нагрузку из RAM в видеопамять
     });
-    qaPipeline = await pipeline('question-answering', 'onnx-community/xlm-roberta-base-squad2-distilled-ONNX', { 
-        dtype: 'q8',
-        device: 'wasm'
-    });
+
+    // ИСПРАВЛЕНИЕ: Показываем окно при каждой загрузке страницы
+    showQaPrompt();
 
     const resources = window.resources || [];
     

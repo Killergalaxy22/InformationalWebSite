@@ -205,6 +205,16 @@ async function initSemanticSearch() {
         showQaPrompt();
     }
 
+    // ДОБАВЛЕНО: Разрешаем поиск сразу после загрузки моделей, не дожидаясь конца индексации
+    semanticReadyResolve();
+
+    // Проверяем, был ли URL запрос при загрузке
+    const q = window.getQueryParam();
+    if (q) {
+        document.getElementById('searchInput').value = q;
+        window.performSearch();
+    }
+
     const resources = window.resources || [];
     
     // ПРИОРИТЕТ: Перемещаем текущую статью в начало списка, чтобы она индексировалась первой
@@ -248,17 +258,6 @@ async function initSemanticSearch() {
     
     updateStatus('Готово!', true);
     setTimeout(() => updateStatus('', false), 2000);
-    
-    // РАЗРЕШАЕМ ПОИСК
-    semanticReadyResolve();
-
-    // Проверяем, был ли URL запрос при загрузке
-    const q = window.getQueryParam();
-    if (q) {
-        document.getElementById('searchInput').value = q;
-        // Вызываем без параметров, так как performSearch теперь сам определит контекст
-        window.performSearch();
-    }
 }
 
 // Переопределяем глобальную функцию поиска

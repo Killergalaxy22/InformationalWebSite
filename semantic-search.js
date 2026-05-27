@@ -270,7 +270,7 @@ window.performSearch = async function(targetArticleId = null) {
     const query = queryRaw.trim();
     
     // Определяем контекст: главная или статья
-    const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
+    const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '';
     
     // ИСПРАВЛЕНИЕ: Если поиск локальный, а переданный ID некорректен (null, undefined или <= 0), определяем его по URL
     if (!isHomePage && (targetArticleId === null || typeof targetArticleId !== 'number' || targetArticleId <= 0)) {
@@ -432,3 +432,13 @@ window.performSearch = async function(targetArticleId = null) {
 
 // Запуск
 initSemanticSearch();
+
+// ДОБАВЛЕНО: Принудительное освобождение WASM-памяти ONNX Runtime при перезагрузке страницы
+window.addEventListener('beforeunload', async () => {
+    if (extractor && typeof extractor.dispose === 'function') {
+        await extractor.dispose();
+    }
+    if (qaPipeline && typeof qaPipeline.dispose === 'function') {
+        await qaPipeline.dispose();
+    }
+});
